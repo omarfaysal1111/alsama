@@ -1,3 +1,6 @@
+import 'package:alsama/features/auth/presentation/pages/login_page.dart';
+import 'package:alsama/features/auth/presentation/pages/register_page.dart';
+import 'package:alsama/features/cart/presentation/pages/cart_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/di/injection_container.dart' as di;
@@ -18,8 +21,11 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Alsama',
-        theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
-        home: const MainPage(),
+        theme: ThemeData(
+          fontFamily: 'Cairo', 
+          scaffoldBackgroundColor: Colors.white,
+          primarySwatch: Colors.blue, useMaterial3: true),
+        home:  CartPage(),
         debugShowCheckedModeBanner: false,
       ),
     );
