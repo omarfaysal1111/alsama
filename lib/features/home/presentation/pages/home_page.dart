@@ -25,14 +25,21 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Alsama'),
+        title: const Text('Alsama',style: TextStyle(color: Colors.black),),
         centerTitle: true,
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+       // backgroundColor: Colors.blue,
+       // foregroundColor: Colors.white,
         elevation: 0,
+        leading: IconButton(
+    onPressed: () {},
+    icon: const Icon(Icons.format_align_left_outlined),
+    color: Colors.black,
+     iconSize: 24.0,
+  ),
         actions: [
+          IconButton(onPressed: (){}, icon: Icon(Icons.shopping_bag_outlined) , color: Colors.black,iconSize: 24.0,),
           IconButton(
-            icon: const Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh,color: Colors.black,),
             onPressed: () {
               print('HomePage: Manual refresh triggered');
               context.read<ProductsBloc>().add(GetProductsRequested());
