@@ -31,6 +31,7 @@ class CategoriesPage extends StatelessWidget {
       Expanded( 
         child: ListView.builder(
           itemCount: 3,
+          padding: EdgeInsets.all(0),
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: (){},
