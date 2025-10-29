@@ -17,7 +17,16 @@ class CategoriesPage extends StatelessWidget {
         ),),
         leading: IconButton(onPressed: (){}, icon:Icon(Icons.format_align_left),color: Colors.black,),
         actions: [
-          IconButton(onPressed: (){}, icon: Icon(Icons.shopping_bag_outlined),color: Colors.black,iconSize: 24,)
+           GestureDetector(
+            onTap: (){},
+            child: Padding(
+              padding:  EdgeInsets.only(right: width*(16.0/390)),
+              child: SizedBox(
+                width: 24,
+                height: 24,
+                child: Image.asset('assets/images/shopping-bag.png')),
+            ),
+          ),
         ],
         centerTitle: true,
         backgroundColor: Colors.white,

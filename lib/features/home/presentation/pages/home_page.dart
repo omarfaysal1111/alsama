@@ -48,11 +48,15 @@ class _HomePageState extends State<HomePage> {
           iconSize: 24.0,
         ),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.shopping_bag_outlined),
-            color: Colors.black,
-            iconSize: 24.0,
+          GestureDetector(
+            onTap: (){},
+            child: Padding(
+              padding:  EdgeInsets.only(right: width*(16.0/390)),
+              child: SizedBox(
+                width: 24,
+                height: 24,
+                child: Image.asset('assets/images/shopping-bag.png')),
+            ),
           ),
           IconButton(
             icon: const Icon(Icons.refresh, color: Colors.black),
@@ -196,20 +200,23 @@ class _HomePageState extends State<HomePage> {
                            List<String> categories = [ "عباية", "ادناء", "فستان"];
                           return Column(
                             children: [
-                              Container(
-                                
-                                width: 60,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                     
-                                  color: Color(0xffF3F5F6),
-                                  border: Border.all(color: Color(0xffE0E2E3))
+                              GestureDetector(
+                                onTap: (){},
+                                child: Container(
+                                  
+                                  width: 60,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                       
+                                    color: Color(0xffF3F5F6),
+                                    border: Border.all(color: Color(0xffE0E2E3))
+                                  ),
+                                  child: SizedBox(
+                                    width: 40,
+                                    height: 40,
+                                    child: Image.asset('assets/images/fashion.png')),
+                                  
                                 ),
-                                child: SizedBox(
-                                  width: 40,
-                                  height: 40,
-                                  child: Image.asset('assets/images/fashion.png')),
-                                
                               ),
                               Padding(
                                 padding:  EdgeInsets.only(top: height*0.002),
