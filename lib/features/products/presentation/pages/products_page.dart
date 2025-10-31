@@ -110,16 +110,14 @@ class ProductsPage extends StatelessWidget {
       barrierColor: Colors.black.withOpacity(0.4),
       transitionDuration: const Duration(milliseconds: 400),
       pageBuilder: (context, animation, secondaryAnimation) {
-        // ✅ هنا نحط FilterWidget بشكل آمن
         return Align(
           alignment: Alignment.centerRight,
           child: FilterWidget(),
         );
       },
       transitionBuilder: (context, animation, secondaryAnimation, child) {
-        // ✅ نحرك الـ child اللي جاي من pageBuilder
         final offsetAnimation = Tween<Offset>(
-          begin: const Offset(1.0, 0.0), // يبدأ من اليمين
+          begin: const Offset(1.0, 0.0),
           end: Offset.zero,
         ).animate(CurvedAnimation(
           parent: animation,
