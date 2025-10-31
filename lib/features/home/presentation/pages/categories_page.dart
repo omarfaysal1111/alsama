@@ -5,43 +5,88 @@ class CategoriesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Categories'),
+        title: const Text('الأقسام',style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w500,
+          color: Colors.black
+        ),),
+        leading: IconButton(onPressed: (){}, icon:Icon(Icons.format_align_left),color: Colors.black,),
+        actions: [
+           GestureDetector(
+            onTap: (){},
+            child: Padding(
+              padding:  EdgeInsets.only(right: width*(16.0/390)),
+              child: SizedBox(
+                width: 24,
+                height: 24,
+                child: Image.asset('assets/images/shopping-bag.png')),
+            ),
+          ),
+        ],
         centerTitle: true,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
         foregroundColor: Colors.white,
         elevation: 0,
       ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.category,
-              size: 64,
-              color: Colors.grey,
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Categories Page',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey,
+     body: Padding(
+  padding: EdgeInsets.symmetric(horizontal: width * 0.04),
+  child: Column(
+    children: [
+      Expanded( 
+        child: ListView.builder(
+          itemCount: 3,
+          padding: EdgeInsets.all(0),
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: (){},
+              child: Container(  
+                margin: EdgeInsets.only(bottom: height*0.016),
+                height: height*100/844,
+                decoration: BoxDecoration(
+                  color: Color(0xffF3F5F6),
+                  borderRadius: BorderRadius.circular(0),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding:  EdgeInsets.symmetric(horizontal: width*0.04),
+                        child: Text(
+                          'اسدال',  
+                                                      textAlign: TextAlign.right,
+                 
+                          textDirection: TextDirection.rtl,
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+              
+                    ClipRRect(
+                      child: Image.asset(
+                        'assets/images/img.png',
+                        width: 80,
+                        height: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Coming Soon',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
-            ),
-          ],
+            );
+          },
         ),
       ),
+    ],
+  ),
+),
     );
-  }
-}
+  }}
