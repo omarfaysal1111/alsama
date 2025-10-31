@@ -22,14 +22,23 @@ class MyApp extends StatelessWidget {
         BlocProvider<ProductsBloc>(create: (context) => di.sl<ProductsBloc>()),
       ],
       child: MaterialApp(
+        
         title: 'Alsama',
+       
+      
         theme: ThemeData(
+
+          
           fontFamily: 'Cairo', 
           scaffoldBackgroundColor: Colors.white,
           primarySwatch: Colors.blue, useMaterial3: true),
         home:  ProductDetailPage(),
         debugShowCheckedModeBanner: false,
       ),
+
+
+
+      
     );
   }
 }
