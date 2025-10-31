@@ -14,14 +14,16 @@ abstract class ProductsRemoteDataSource {
 
 class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
   final Dio _dio;
-  
+
   ProductsRemoteDataSourceImpl({required Dio dio}) : _dio = dio;
-  
+
   @override
   Future<List<ProductModel>> getAllProducts() async {
     print('ProductsRemoteDataSource: getAllProducts called');
     try {
-      print('ProductsRemoteDataSource: Making API call to ${ApiEndpoints.getAllProducts}');
+      print(
+        'ProductsRemoteDataSource: Making API call to ${ApiEndpoints.getAllProducts}',
+      );
       final response = await _dio.get(
         ApiEndpoints.getAllProducts,
         options: Options(
@@ -31,9 +33,11 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
           },
         ),
       );
-      
-      print('ProductsRemoteDataSource: API response status: ${response.statusCode}');
-      
+
+      print(
+        'ProductsRemoteDataSource: API response status: ${response.statusCode}',
+      );
+
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data;
         return data.map((json) => ProductModel.fromJson(json)).toList();
@@ -69,7 +73,7 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
       );
     }
   }
-  
+
   @override
   Future<ProductModel> getProductById(String id) async {
     try {
@@ -82,7 +86,7 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
           },
         ),
       );
-      
+
       if (response.statusCode == 200) {
         return ProductModel.fromJson(response.data);
       } else {
@@ -117,7 +121,7 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
       );
     }
   }
-  
+
   @override
   Future<List<ProductModel>> searchProducts(String query) async {
     try {
@@ -131,7 +135,7 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
           },
         ),
       );
-      
+
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data;
         return data.map((json) => ProductModel.fromJson(json)).toList();
@@ -167,7 +171,7 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
       );
     }
   }
-  
+
   @override
   Future<List<ProductModel>> getFeaturedProducts() async {
     try {
@@ -180,13 +184,14 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
           },
         ),
       );
-      
+
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data;
         return data.map((json) => ProductModel.fromJson(json)).toList();
       } else {
         throw ServerException(
-          message: 'Failed to fetch featured products: ${response.statusMessage}',
+          message:
+              'Failed to fetch featured products: ${response.statusMessage}',
           code: response.statusCode,
         );
       }
@@ -216,7 +221,7 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
       );
     }
   }
-  
+
   @override
   Future<List<String>> getCategories() async {
     try {
@@ -229,7 +234,7 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
           },
         ),
       );
-      
+
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data;
         return data.map((json) => json['name']?.toString() ?? '').toList();
