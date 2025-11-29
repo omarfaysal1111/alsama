@@ -10,6 +10,7 @@ class CategoriesPage extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
+        
         title: const Text('الأقسام',style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.w500,
@@ -29,8 +30,9 @@ class CategoriesPage extends StatelessWidget {
           ),
         ],
         centerTitle: true,
-        backgroundColor: Colors.white,
+         surfaceTintColor: Colors.white,
         foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
         elevation: 0,
       ),
      body: Padding(

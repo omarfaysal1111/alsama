@@ -17,8 +17,10 @@ class ProductDetailPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: Colors.white,
         foregroundColor: Colors.white,
         backgroundColor: Colors.white,
+        elevation: 0,
         shadowColor: Colors.white,
         leading: Icon(Icons.arrow_back_ios, color: Colors.black),
       ),
@@ -70,7 +72,7 @@ class ProductDetailPage extends StatelessWidget {
                   SizedBox(height: height * (16 / 844)),
                   Divider(color: Color(0xffF8F8F8), thickness: 1),
 
-                  SizedBox(height: height * (16 / 844)),
+                  SizedBox(height: height * (12 / 844)),
 
                   SizedBox(
                     height: height * (80 / 844),

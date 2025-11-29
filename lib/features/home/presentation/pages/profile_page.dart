@@ -1,3 +1,4 @@
+import 'package:alsama/features/auth/presentation/widgets/logout_dialog.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -9,8 +10,10 @@ class ProfilePage extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+          surfaceTintColor: Colors.white,
         foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        elevation: 0,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -45,7 +48,7 @@ class ProfilePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            SizedBox(height: height * 0.03),
+            SizedBox(height: height * 0.04),
             Text(
               ' خيارات الحساب',
               style: TextStyle(
@@ -54,7 +57,7 @@ class ProfilePage extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            SizedBox(height: height * 0.014),
+            SizedBox(height: height * 0.016),
 
             FavoriteHeaderCard(
               title: 'المفضلة',
@@ -62,40 +65,40 @@ class ProfilePage extends StatelessWidget {
               onClick: () {},
             ),
 
-             Padding(
-               padding:  EdgeInsets.only(top: height*0.016),
-               child: FavoriteHeaderCard(
-                title: 'عنواني',
-                icons: Icons.location_on_outlined,
-                onClick: () {},
-                           ),
-             ),
+            //  Padding(
+            //    padding:  EdgeInsets.only(top: height*0.016),
+            //    child: FavoriteHeaderCard(
+            //     title: 'عنواني',
+            //     icons: Icons.location_on_outlined,
+            //     onClick: () {},
+            //                ),
+            //  ),
 
 
 
 
-              SizedBox(height: height * 0.03),
-            Text(
-              'الإعدادات & المساعدة',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            SizedBox(height: height * 0.014),
-
+              SizedBox(height: height * 0.016),
+        
             FavoriteHeaderCard(
-              title: 'الإعدادات',
-              icons: Icons.settings,
-              onClick: () {},
+              title: 'تسجيل الخروج',
+              icons: Icons.logout_outlined,
+              onClick: () {
+                showDialog(context: context, builder: (context) {
+                  return LogoutDialog();
+                },);
+              },
             ),
 
              Padding(
                padding:  EdgeInsets.only(top: height*0.016),
                child: FavoriteHeaderCard(
-                title: 'مركز المساعدة',
-                icons: Icons.help_center_outlined,
+                textColor: Color(0xff821F40),
+                iconColor: Color(0xff821F40),
+                title: ' حذف الحساب',
+              
+                icons: Icons.person_off_outlined
+                ,
+
                 onClick: () {},
                            ),
              ),
@@ -110,12 +113,14 @@ class FavoriteHeaderCard extends StatelessWidget {
   final String title;
   final VoidCallback? onClick;
   final IconData icons;
-
+final Color? iconColor;
+final Color ?textColor;
   const FavoriteHeaderCard({
     super.key,
     required this.title,
     required this.onClick,
-    required this.icons,
+    required this.icons, this.iconColor, this.textColor,
+
   });
 
   @override
@@ -125,33 +130,35 @@ class FavoriteHeaderCard extends StatelessWidget {
       height: 60,
       color: const Color(0xffF8F8F8),
       padding: EdgeInsets.symmetric(horizontal: width * 0.04),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            onPressed: onClick,
-            icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
-          ),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                title,
-                textDirection: TextDirection.rtl,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black,
+      child: GestureDetector(
+        onTap: onClick,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Icon(
+                Icons.arrow_back_ios_new, color: Colors.black,
+            ),
+        
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  title,
+                  textDirection: TextDirection.rtl,
+                  style:  TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: textColor ?? Colors.black,
+                  ),
                 ),
-              ),
-
-              SizedBox(width: width * 0.012),
-
-              Icon(icons, color: Colors.black),
-            ],
-          ),
-        ],
+        
+                SizedBox(width: width * 0.012),
+        
+                Icon(icons, color: iconColor?? Colors.black),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

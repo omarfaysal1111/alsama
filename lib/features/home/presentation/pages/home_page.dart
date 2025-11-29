@@ -38,8 +38,9 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
+         surfaceTintColor: Colors.white,
         foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           onPressed: () {},
