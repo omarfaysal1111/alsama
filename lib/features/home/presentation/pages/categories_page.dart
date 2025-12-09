@@ -1,3 +1,4 @@
+import 'package:alsama/features/home/presentation/pages/menu_widget.dart';
 import 'package:flutter/material.dart';
 
 class CategoriesPage extends StatelessWidget {
@@ -16,7 +17,42 @@ class CategoriesPage extends StatelessWidget {
           fontWeight: FontWeight.w500,
           color: Colors.black
         ),),
-        leading: IconButton(onPressed: (){}, icon:Icon(Icons.format_align_left),color: Colors.black,),
+        leading: IconButton(onPressed: (){
+
+    showGeneralDialog(
+  context: context,
+  barrierDismissible: true,
+  barrierLabel: "إغلاق",
+  barrierColor: Colors.black.withOpacity(0.3),
+  pageBuilder: (context, animation, secondaryAnimation) {
+    return Align(
+      alignment: Alignment.centerLeft, 
+      child: MenuWidget(),
+    );
+  },
+  transitionBuilder: (context, animation, secondaryAnimation, child) {
+    final offsetAnimation = Tween<Offset>(
+      begin: const Offset(1.0, 0.0), 
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: animation,
+        curve: Curves.easeOutCubic,
+      ),
+    );
+
+    return SlideTransition(
+      position: offsetAnimation,
+      child: child,
+    );
+  },
+
+
+
+          
+          
+          );
+        }, icon:Icon(Icons.format_align_left),color: Colors.black,),
         actions: [
            GestureDetector(
             onTap: (){},

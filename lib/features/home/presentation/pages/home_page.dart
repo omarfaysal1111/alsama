@@ -1,3 +1,5 @@
+import 'package:alsama/features/home/presentation/pages/banner_widget.dart';
+import 'package:alsama/features/home/presentation/pages/menu_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -28,26 +30,51 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'السماء',
-          style: TextStyle(
-            fontFamily: 'Cairo',
-            fontWeight: FontWeight.w500,
-            color: Colors.black,
-            fontSize: 18,
-          ),
+        title:  SizedBox(
+    
+          child: Image.asset('assets/images/alsama2.png'),
         ),
         centerTitle: true,
          surfaceTintColor: Colors.white,
         foregroundColor: Colors.white,
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.format_align_left_outlined),
-          color: Colors.black,
-          iconSize: 24.0,
-        ),
+       leading: IconButton(onPressed: (){
+
+    showGeneralDialog(
+  context: context,
+  barrierDismissible: true,
+  barrierLabel: "إغلاق",
+  barrierColor: Colors.black.withOpacity(0.3),
+  pageBuilder: (context, animation, secondaryAnimation) {
+    return Align(
+      alignment: Alignment.centerLeft, 
+      child: MenuWidget(),
+    );
+  },
+  transitionBuilder: (context, animation, secondaryAnimation, child) {
+    final offsetAnimation = Tween<Offset>(
+      begin: const Offset(1.0, 0.0), 
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: animation,
+        curve: Curves.easeOutCubic,
+      ),
+    );
+
+    return SlideTransition(
+      position: offsetAnimation,
+      child: child,
+    );
+  },
+
+
+
+          
+          
+          );
+        }, icon:Icon(Icons.format_align_left),color: Colors.black,),
         actions: [
           GestureDetector(
             onTap: (){},
@@ -129,7 +156,9 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
+
                     TextField(
+
                       textDirection: TextDirection.rtl,
                       textAlign: TextAlign.right,
                       decoration: InputDecoration(
@@ -171,6 +200,10 @@ class _HomePageState extends State<HomePage> {
                         }
                       },
                     ),
+
+                    BannerSlider(),
+SizedBox(height: 20,),
+
 
                     Padding(
                       padding: EdgeInsets.only(

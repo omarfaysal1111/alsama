@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Cairo', 
           scaffoldBackgroundColor: Colors.white,
           primarySwatch: Colors.blue, useMaterial3: true),
-        home:  ProfilePage(),
+        home:  ProductDetailPage(),
         debugShowCheckedModeBanner: false,
       ),
 

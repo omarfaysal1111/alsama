@@ -1,5 +1,7 @@
 import 'package:alsama/features/auth/presentation/widgets/logout_dialog.dart';
+import 'package:alsama/features/home/presentation/pages/banner_widget.dart';
 import 'package:flutter/material.dart';
+
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -48,6 +50,9 @@ class ProfilePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
+
+   
+
             SizedBox(height: height * 0.04),
             Text(
               ' خيارات الحساب',
@@ -102,12 +107,25 @@ class ProfilePage extends StatelessWidget {
                 onClick: () {},
                            ),
              ),
+             SizedBox(height: 40,),
+
+                    //  BannerSlider(),
+
           ],
         ),
       ),
     );
   }
 }
+
+
+
+
+
+
+
+
+
 
 class FavoriteHeaderCard extends StatelessWidget {
   final String title;

@@ -1,3 +1,4 @@
+import 'package:alsama/features/home/presentation/pages/menu_widget.dart';
 import 'package:flutter/material.dart';
 
 class WishlistPage extends StatelessWidget {
@@ -11,7 +12,7 @@ class WishlistPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'السماء',
+          'المفضلة',
           style: TextStyle(
             fontFamily: 'Cairo',
             fontWeight: FontWeight.w500,
@@ -24,12 +25,42 @@ class WishlistPage extends StatelessWidget {
         foregroundColor: Colors.white,
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.format_align_left_outlined),
-          color: Colors.black,
-          iconSize: 24.0,
-        ),
+        leading: IconButton(onPressed: (){
+
+    showGeneralDialog(
+  context: context,
+  barrierDismissible: true,
+  barrierLabel: "إغلاق",
+  barrierColor: Colors.black.withOpacity(0.3),
+  pageBuilder: (context, animation, secondaryAnimation) {
+    return Align(
+      alignment: Alignment.centerLeft, 
+      child: MenuWidget(),
+    );
+  },
+  transitionBuilder: (context, animation, secondaryAnimation, child) {
+    final offsetAnimation = Tween<Offset>(
+      begin: const Offset(1.0, 0.0), 
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: animation,
+        curve: Curves.easeOutCubic,
+      ),
+    );
+
+    return SlideTransition(
+      position: offsetAnimation,
+      child: child,
+    );
+  },
+
+
+
+          
+          
+          );
+        }, icon:Icon(Icons.format_align_left),color: Colors.black,),
         actions: [
           GestureDetector(
             onTap: (){},
