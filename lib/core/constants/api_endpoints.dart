@@ -13,7 +13,10 @@ class ApiEndpoints {
   static const String getProductById = '/fashion/product';
   static const String searchProducts = '/fashion/search';
   static const String getFeaturedProducts = '/fashion/featured';
-  static const String getCategories = '/fashion/categories';
+  
+  // Categories endpoints
+  static const String getCategories = '$baseUrl/fashion/GetCatrgories';
+  static const String getModelsByCategory = '$baseUrl/fashion/GetModels';
 
   // Cart endpoints
   static const String getCart = '/cart';

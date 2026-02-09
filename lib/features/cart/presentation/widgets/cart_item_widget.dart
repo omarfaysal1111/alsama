@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class CartItemCard extends StatelessWidget {
+  final String cartItemId;
   final String productName;
   final String price;
-  final String size;
-  final String color;
+  final String? size;
+  final String? color;
   final String image;
   final int quantity;
   final VoidCallback? onIncrease;
@@ -13,10 +15,11 @@ class CartItemCard extends StatelessWidget {
 
   const CartItemCard({
     super.key,
+    required this.cartItemId,
     required this.productName,
     required this.price,
-    required this.size,
-    required this.color,
+    this.size,
+    this.color,
     required this.image,
     required this.quantity,
     this.onIncrease,
@@ -52,7 +55,22 @@ class CartItemCard extends StatelessWidget {
                     width: width * 81 / 390,
                     height: height * 81 / 844,
                     decoration: BoxDecoration(color: const Color(0xffF8F8F8)),
-                    child: Image.asset(image, fit: BoxFit.cover),
+                    child: image.startsWith('http')
+                        ? CachedNetworkImage(
+                            imageUrl: image,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => Container(
+                              color: Colors.grey[300],
+                              child: const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) => Container(
+                              color: Colors.grey[300],
+                              child: const Icon(Icons.error),
+                            ),
+                          )
+                        : Image.asset(image, fit: BoxFit.cover),
                   ),
 
                   SizedBox(width: width * 0.05),
@@ -91,22 +109,25 @@ class CartItemCard extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    'المقاس: $size',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Color(0xff55585B),
+                                  if (size != null && size!.isNotEmpty)
+                                    Text(
+                                      'المقاس: $size',
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Color(0xff55585B),
+                                      ),
+                                      overflow: TextOverflow.visible,
                                     ),
-                                    overflow: TextOverflow.visible,
-                                  ),
-                                  SizedBox(height: height * 0.016),
-                                  Text(
-                                    'اللون: $color',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Color(0xff55585B),
+                                  if (size != null && size!.isNotEmpty)
+                                    SizedBox(height: height * 0.016),
+                                  if (color != null && color!.isNotEmpty)
+                                    Text(
+                                      'اللون: $color',
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Color(0xff55585B),
+                                      ),
                                     ),
-                                  ),
                                 ],
                               ),
                             ),

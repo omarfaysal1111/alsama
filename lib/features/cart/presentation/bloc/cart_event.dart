@@ -1,3 +1,5 @@
+import '../../../products/domain/entities/product.dart';
+
 abstract class CartEvent {}
 
 class GetCartRequested extends CartEvent {}
@@ -8,6 +10,16 @@ class AddToCartRequested extends CartEvent {
   
   AddToCartRequested({
     required this.productId,
+    required this.quantity,
+  });
+}
+
+class AddProductToCartRequested extends CartEvent {
+  final Product product;
+  final int quantity;
+  
+  AddProductToCartRequested({
+    required this.product,
     required this.quantity,
   });
 }

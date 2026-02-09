@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 enum keyboardT { text, number, email }
 
 class TextFieldRegister extends StatelessWidget {
@@ -17,20 +16,19 @@ class TextFieldRegister extends StatelessWidget {
     required this.onChanged,
     required this.hinttext,
     required this.icon,
-    this.prefixIcon, required this.keyboardType,
+    this.prefixIcon,
+    required this.keyboardType,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-
-
-      keyboardType: keyboardType == keyboardT.number
-          ? TextInputType.number
-          : keyboardType == keyboardT.email
+      keyboardType:
+          keyboardType == keyboardT.number
+              ? TextInputType.number
+              : keyboardType == keyboardT.email
               ? TextInputType.emailAddress
               : TextInputType.text,
-
 
       controller: emailController,
       textDirection: TextDirection.rtl,
@@ -38,9 +36,8 @@ class TextFieldRegister extends StatelessWidget {
       onChanged: onChanged,
       decoration: InputDecoration(
         hintText: hinttext,
-        
-        hintStyle: const TextStyle(
 
+        hintStyle: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w400,
           color: Color(0xffADAFB1),

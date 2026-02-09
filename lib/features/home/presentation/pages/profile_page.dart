@@ -1,7 +1,7 @@
+import 'package:alsama/core/routes/app_routes.dart';
 import 'package:alsama/features/auth/presentation/widgets/logout_dialog.dart';
 import 'package:alsama/features/home/presentation/pages/banner_widget.dart';
 import 'package:flutter/material.dart';
-
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -12,7 +12,7 @@ class ProfilePage extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-          surfaceTintColor: Colors.white,
+        surfaceTintColor: Colors.white,
         foregroundColor: Colors.white,
         backgroundColor: Colors.white,
         elevation: 0,
@@ -50,9 +50,6 @@ class ProfilePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-
-   
-
             SizedBox(height: height * 0.04),
             Text(
               ' خيارات الحساب',
@@ -67,7 +64,27 @@ class ProfilePage extends StatelessWidget {
             FavoriteHeaderCard(
               title: 'المفضلة',
               icons: Icons.favorite_border_outlined,
-              onClick: () {},
+              onClick: () {
+                Navigator.pushNamed(context, AppRoutes.wishlist);
+              },
+            ),
+
+            Padding(
+              padding: EdgeInsets.only(top: height * 0.016),
+              child: FavoriteHeaderCard(
+                title: 'طلباتي',
+                icons: Icons.shopping_bag_outlined,
+                onClick: () {
+                  // TODO: Uncomment when OrdersPage is ready
+                  // Navigator.pushNamed(context, '/orders');
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('صفحة الطلبات قيد التطوير'),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                },
+              ),
             ),
 
             //  Padding(
@@ -78,39 +95,36 @@ class ProfilePage extends StatelessWidget {
             //     onClick: () {},
             //                ),
             //  ),
+            SizedBox(height: height * 0.016),
 
-
-
-
-              SizedBox(height: height * 0.016),
-        
             FavoriteHeaderCard(
               title: 'تسجيل الخروج',
               icons: Icons.logout_outlined,
               onClick: () {
-                showDialog(context: context, builder: (context) {
-                  return LogoutDialog();
-                },);
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return LogoutDialog();
+                  },
+                );
               },
             ),
 
-             Padding(
-               padding:  EdgeInsets.only(top: height*0.016),
-               child: FavoriteHeaderCard(
+            Padding(
+              padding: EdgeInsets.only(top: height * 0.016),
+              child: FavoriteHeaderCard(
                 textColor: Color(0xff821F40),
                 iconColor: Color(0xff821F40),
                 title: ' حذف الحساب',
-              
-                icons: Icons.person_off_outlined
-                ,
+
+                icons: Icons.person_off_outlined,
 
                 onClick: () {},
-                           ),
-             ),
-             SizedBox(height: 40,),
+              ),
+            ),
+            SizedBox(height: 40),
 
-                    //  BannerSlider(),
-
+            //  BannerSlider(),
           ],
         ),
       ),
@@ -118,27 +132,19 @@ class ProfilePage extends StatelessWidget {
   }
 }
 
-
-
-
-
-
-
-
-
-
 class FavoriteHeaderCard extends StatelessWidget {
   final String title;
   final VoidCallback? onClick;
   final IconData icons;
-final Color? iconColor;
-final Color ?textColor;
+  final Color? iconColor;
+  final Color? textColor;
   const FavoriteHeaderCard({
     super.key,
     required this.title,
     required this.onClick,
-    required this.icons, this.iconColor, this.textColor,
-
+    required this.icons,
+    this.iconColor,
+    this.textColor,
   });
 
   @override
@@ -153,26 +159,24 @@ final Color ?textColor;
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Icon(
-                Icons.arrow_back_ios_new, color: Colors.black,
-            ),
-        
+            Icon(Icons.arrow_back_ios_new, color: Colors.black),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
                   title,
                   textDirection: TextDirection.rtl,
-                  style:  TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     color: textColor ?? Colors.black,
                   ),
                 ),
-        
+
                 SizedBox(width: width * 0.012),
-        
-                Icon(icons, color: iconColor?? Colors.black),
+
+                Icon(icons, color: iconColor ?? Colors.black),
               ],
             ),
           ],

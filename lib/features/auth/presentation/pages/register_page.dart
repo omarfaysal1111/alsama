@@ -108,7 +108,7 @@ class RegisterPage extends StatelessWidget {
                 ),
               ),
 
-Padding(
+              Padding(
                 padding: const EdgeInsets.only(top: 16),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -117,52 +117,52 @@ Padding(
                       ' التسجيل كتاجر',
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
-                        fontSize: 14, color: Color(0xff333333)),
+                        fontSize: 14,
+                        color: Color(0xff333333),
+                      ),
                     ),
 
-                    SizedBox(width: 4,),
+                    SizedBox(width: 4),
 
                     ValueListenableBuilder<bool>(
-                      
                       valueListenable: isChecked,
                       builder: (context, value, _) {
-                        
-                      
                         return Transform.scale(
-  scale: 1.0, // ممكن تغيري الحجم لو عايزة
-  child: Checkbox(
-    value: value,
-    onChanged: (newValue) {
-      isChecked.value = newValue!;
-    },
-    visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-    side: value 
-      ? null 
-      : const BorderSide(
-          color: Color(0xFF6D6D6D),
-          width: 2,
-        ),
-    fillColor: MaterialStateProperty.resolveWith(
-      (states) {
-        if (states.contains(MaterialState.selected)) {
-          return const Color(0xff821F40);
-        }
-        return Colors.transparent;
-      },
-    ),
-    checkColor: Colors.white,
-  ),
-);
+                          scale: 1.0, // ممكن تغيري الحجم لو عايزة
+                          child: Checkbox(
+                            value: value,
+                            onChanged: (newValue) {
+                              isChecked.value = newValue!;
+                            },
+                            visualDensity: const VisualDensity(
+                              horizontal: -4,
+                              vertical: -4,
+                            ),
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            side:
+                                value
+                                    ? null
+                                    : const BorderSide(
+                                      color: Color(0xFF6D6D6D),
+                                      width: 2,
+                                    ),
+                            fillColor: MaterialStateProperty.resolveWith((
+                              states,
+                            ) {
+                              if (states.contains(MaterialState.selected)) {
+                                return const Color(0xff821F40);
+                              }
+                              return Colors.transparent;
+                            }),
+                            checkColor: Colors.white,
+                          ),
+                        );
                       },
                     ),
                   ],
                 ),
               ),
-
-
-
-
 
               Padding(
                 padding: const EdgeInsets.only(top: 16),
@@ -173,23 +173,23 @@ Padding(
                       'أوافق على شروط الخدمة وسياسةالخصوصية',
                       style: TextStyle(fontSize: 14, color: Color(0xff333333)),
                     ),
-                    SizedBox(width: 4,),
+                    SizedBox(width: 4),
 
                     ValueListenableBuilder<bool>(
-                      
                       valueListenable: isChecked2,
                       builder: (context, value, _) {
-                        
-                      
                         return Checkbox(
                           value: value,
                           onChanged: (newValue) {
                             isChecked2.value = newValue!;
                           },
-                          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          visualDensity: const VisualDensity(
+                            horizontal: -4,
+                            vertical: -4,
+                          ),
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
                           side:
-                          
                               value
                                   ? null
                                   : const BorderSide(

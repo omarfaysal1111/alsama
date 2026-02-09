@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class CustomDropdown extends StatelessWidget {
-  final List<String> items; 
+  final List<String> items;
   final String? selectedValue;
-  final ValueChanged<String?> onChanged; 
-  final String hintText; 
-  final double? width; 
+  final ValueChanged<String?> onChanged;
+  final String hintText;
+  final double? width;
   final double? height;
   final Color? backgroundColor;
 
@@ -34,7 +34,7 @@ class CustomDropdown extends StatelessWidget {
         textDirection: TextDirection.rtl,
         child: DropdownButtonHideUnderline(
           child: DropdownButton<String>(
-                      isExpanded: true,
+            isExpanded: true,
             icon: const Icon(Icons.keyboard_arrow_down),
             value: selectedValue,
             hint: Text(
@@ -45,22 +45,18 @@ class CustomDropdown extends StatelessWidget {
                 fontWeight: FontWeight.w400,
               ),
             ),
-            items: items.map((item) {
-              return DropdownMenuItem<String>(
-                value: item,
-                child: Text(
-                  item,
-                  textDirection: TextDirection.rtl,  
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.black,
-                  ),
-                ),
-              );
-            }).toList(),
+            items:
+                items.map((item) {
+                  return DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(
+                      item,
+                      textDirection: TextDirection.rtl,
+                      style: const TextStyle(fontSize: 14, color: Colors.black),
+                    ),
+                  );
+                }).toList(),
             onChanged: onChanged,
-        
-            
           ),
         ),
       ),

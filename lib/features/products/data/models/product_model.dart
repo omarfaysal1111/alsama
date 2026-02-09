@@ -32,7 +32,7 @@ class ProductModel extends Product {
           .toList() ?? [],
       parent: json['parent']?.toString() ?? '',
       brand: ProductBrandModel.fromJson(json['brand'] as Map<String, dynamic>? ?? {}),
-      category: ProductCategoryModel.fromJson(json['category'] as Map<String, dynamic>? ?? {}),
+      category: ProductCategoryInfoModel.fromJson(json['category'] as Map<String, dynamic>? ?? {}),
       additionalInformation: (json['additionalInformation'] as List<dynamic>?)
           ?.map((e) => ProductAdditionalInfoModel.fromJson(e as Map<String, dynamic>))
           .toList() ?? [],
@@ -53,7 +53,7 @@ class ProductModel extends Product {
       'imageURLs': imageURLs.map((e) => (e as ProductImageModel).toJson()).toList(),
       'parent': parent,
       'brand': (brand as ProductBrandModel).toJson(),
-      'category': (category as ProductCategoryModel).toJson(),
+      'category': (category as ProductCategoryInfoModel).toJson(),
       'additionalInformation': additionalInformation.map((e) => (e as ProductAdditionalInfoModel).toJson()).toList(),
       'featured': featured,
       'sellCount': sellCount,
@@ -112,11 +112,11 @@ class ProductBrandModel extends ProductBrand {
   }
 }
 
-class ProductCategoryModel extends ProductCategory {
-  const ProductCategoryModel({required super.name});
+class ProductCategoryInfoModel extends ProductCategoryInfo {
+  const ProductCategoryInfoModel({required super.name});
   
-  factory ProductCategoryModel.fromJson(Map<String, dynamic> json) {
-    return ProductCategoryModel(
+  factory ProductCategoryInfoModel.fromJson(Map<String, dynamic> json) {
+    return ProductCategoryInfoModel(
       name: json['name']?.toString() ?? '',
     );
   }

@@ -19,23 +19,9 @@ class GetOrderByIdRequested extends OrdersEvent {
 }
 
 class CreateOrderRequested extends OrdersEvent {
-  final List<Map<String, dynamic>> items;
-  final double subtotal;
-  final double tax;
-  final double shipping;
-  final double total;
-  final String? couponCode;
-  final String? notes;
+  final Map<String, dynamic> orderData;
   
-  CreateOrderRequested({
-    required this.items,
-    required this.subtotal,
-    required this.tax,
-    required this.shipping,
-    required this.total,
-    this.couponCode,
-    this.notes,
-  });
+  CreateOrderRequested({required this.orderData});
 }
 
 class CancelOrderRequested extends OrdersEvent {

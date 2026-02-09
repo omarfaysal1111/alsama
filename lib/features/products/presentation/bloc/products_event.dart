@@ -34,6 +34,12 @@ class GetRelatedProductsRequested extends ProductsEvent {
 
 class GetCategoriesRequested extends ProductsEvent {}
 
+class GetModelsByCategoryRequested extends ProductsEvent {
+  final int categoryId;
+  
+  GetModelsByCategoryRequested({required this.categoryId});
+}
+
 class SearchProductsRequested extends ProductsEvent {
   final String query;
   
