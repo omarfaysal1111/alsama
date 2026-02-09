@@ -3,6 +3,7 @@ import '../../domain/usecases/get_products_usecase.dart';
 import '../../domain/usecases/get_product_by_id_usecase.dart';
 import '../../domain/usecases/search_products_usecase.dart';
 import '../../domain/usecases/get_categories_usecase.dart';
+import '../../domain/usecases/get_models_by_category_usecase.dart';
 import 'products_event.dart';
 import 'products_state.dart';
 
@@ -11,16 +12,19 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
   final GetProductByIdUseCase _getProductByIdUseCase;
   final SearchProductsUseCase _searchProductsUseCase;
   final GetCategoriesUseCase _getCategoriesUseCase;
+  final GetModelsByCategoryUseCase _getModelsByCategoryUseCase;
   
   ProductsBloc({
     required GetProductsUseCase getProductsUseCase,
     required GetProductByIdUseCase getProductByIdUseCase,
     required SearchProductsUseCase searchProductsUseCase,
     required GetCategoriesUseCase getCategoriesUseCase,
+    required GetModelsByCategoryUseCase getModelsByCategoryUseCase,
   }) : _getProductsUseCase = getProductsUseCase,
        _getProductByIdUseCase = getProductByIdUseCase,
        _searchProductsUseCase = searchProductsUseCase,
        _getCategoriesUseCase = getCategoriesUseCase,
+       _getModelsByCategoryUseCase = getModelsByCategoryUseCase,
        super(ProductsInitial()) {
     
     on<GetProductsRequested>(_onGetProductsRequested);
@@ -28,6 +32,7 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
     on<GetFeaturedProductsRequested>(_onGetFeaturedProductsRequested);
     on<GetRelatedProductsRequested>(_onGetRelatedProductsRequested);
     on<GetCategoriesRequested>(_onGetCategoriesRequested);
+    on<GetModelsByCategoryRequested>(_onGetModelsByCategoryRequested);
     on<SearchProductsRequested>(_onSearchProductsRequested);
     on<RefreshProductsRequested>(_onRefreshProductsRequested);
     on<LoadMoreProductsRequested>(_onLoadMoreProductsRequested);
@@ -119,22 +124,37 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
     result.fold(
       (failure) => emit(ProductsError(message: failure.message)),
       (products) {
-        // Find the product to get its category
-        final product = products.firstWhere(
-          (p) => p.id == event.productId,
-          orElse: () => products.first,
-        );
+        if (products.isEmpty) {
+          emit(ProductsEmpty(message: 'No products available'));
+          return;
+        }
         
-        // Get products from the same category (excluding the current product)
-        final relatedProducts = products
-            .where((p) => p.category.name == product.category.name && p.id != event.productId)
-            .take(5)
-            .toList();
-        
-        if (relatedProducts.isEmpty) {
-          emit(ProductsEmpty(message: 'No related products found'));
-        } else {
-          emit(RelatedProductsLoaded(products: relatedProducts));
+        try {
+          // Find the product to get its category
+          final product = products.firstWhere(
+            (p) => p.id == event.productId,
+            orElse: () {
+              // Return first product if found, otherwise throw
+              if (products.isNotEmpty) {
+                return products.first;
+              }
+              throw StateError('No products available');
+            },
+          );
+          
+          // Get products from the same category (excluding the current product)
+          final relatedProducts = products
+              .where((p) => p.category.name == product.category.name && p.id != event.productId)
+              .take(5)
+              .toList();
+          
+          if (relatedProducts.isEmpty) {
+            emit(ProductsEmpty(message: 'No related products found'));
+          } else {
+            emit(RelatedProductsLoaded(products: relatedProducts));
+          }
+        } catch (e) {
+          emit(ProductsError(message: 'Failed to get related products: ${e.toString()}'));
         }
       },
     );
@@ -155,6 +175,29 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
           emit(ProductsEmpty(message: 'No categories found'));
         } else {
           emit(CategoriesLoaded(categories: categories));
+        }
+      },
+    );
+  }
+
+  Future<void> _onGetModelsByCategoryRequested(
+    GetModelsByCategoryRequested event,
+    Emitter<ProductsState> emit,
+  ) async {
+    emit(ProductsLoading());
+    
+    final result = await _getModelsByCategoryUseCase(event.categoryId);
+    
+    result.fold(
+      (failure) => emit(ProductsError(message: failure.message)),
+      (products) {
+        if (products.isEmpty) {
+          emit(ProductsEmpty(message: 'No products found in this category'));
+        } else {
+          emit(ModelsByCategoryLoaded(
+            products: products,
+            categoryId: event.categoryId,
+          ));
         }
       },
     );

@@ -3,13 +3,15 @@ import '../../../../core/constants/api_endpoints.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../models/product_model.dart';
+import '../models/category_model.dart';
 
 abstract class ProductsRemoteDataSource {
   Future<List<ProductModel>> getAllProducts();
   Future<ProductModel> getProductById(String id);
   Future<List<ProductModel>> searchProducts(String query);
   Future<List<ProductModel>> getFeaturedProducts();
-  Future<List<String>> getCategories();
+  Future<List<CategoryModel>> getCategories();
+  Future<List<ProductModel>> getModelsByCategory(int categoryId);
 }
 
 class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
@@ -223,7 +225,7 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
   }
 
   @override
-  Future<List<String>> getCategories() async {
+  Future<List<CategoryModel>> getCategories() async {
     try {
       final response = await _dio.get(
         ApiEndpoints.getCategories,
@@ -236,8 +238,20 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
       );
 
       if (response.statusCode == 200) {
-        final List<dynamic> data = response.data;
-        return data.map((json) => json['name']?.toString() ?? '').toList();
+        final responseData = response.data;
+        
+        // Handle API response structure: {"message": 0, "records": [...]}
+        if (responseData is Map<String, dynamic> && responseData.containsKey('records')) {
+          final List<dynamic> records = responseData['records'] as List<dynamic>;
+          return records.map((json) => CategoryModel.fromJson(json)).toList();
+        } else if (responseData is List) {
+          return responseData.map((json) => CategoryModel.fromJson(json)).toList();
+        } else {
+          throw ServerException(
+            message: 'Invalid response format',
+            code: response.statusCode,
+          );
+        }
       } else {
         throw ServerException(
           message: 'Failed to fetch categories: ${response.statusMessage}',
@@ -260,6 +274,67 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
       } else {
         throw ServerException(
           message: 'Failed to fetch categories: ${e.message}',
+          code: e.response?.statusCode,
+        );
+      }
+    } catch (e) {
+      throw ServerException(
+        message: 'Unexpected error: ${e.toString()}',
+        code: 500,
+      );
+    }
+  }
+
+  @override
+  Future<List<ProductModel>> getModelsByCategory(int categoryId) async {
+    try {
+      final response = await _dio.get(
+        '${ApiEndpoints.getModelsByCategory}/$categoryId',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${AppConstants.bearerToken}',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = response.data;
+        
+        // Handle API response structure: {"message": 0, "records": [...]}
+        if (responseData is Map<String, dynamic> && responseData.containsKey('records')) {
+          final List<dynamic> records = responseData['records'] as List<dynamic>;
+          return records.map((json) => ProductModel.fromJson(json)).toList();
+        } else if (responseData is List) {
+          return responseData.map((json) => ProductModel.fromJson(json)).toList();
+        } else {
+          throw ServerException(
+            message: 'Invalid response format',
+            code: response.statusCode,
+          );
+        }
+      } else {
+        throw ServerException(
+          message: 'Failed to fetch models by category: ${response.statusMessage}',
+          code: response.statusCode,
+        );
+      }
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout ||
+          e.type == DioExceptionType.sendTimeout) {
+        throw NetworkException(
+          message: 'Connection timeout. Please check your internet connection.',
+          code: e.response?.statusCode,
+        );
+      } else if (e.type == DioExceptionType.connectionError) {
+        throw NetworkException(
+          message: 'No internet connection. Please check your network.',
+          code: e.response?.statusCode,
+        );
+      } else {
+        throw ServerException(
+          message: 'Failed to fetch models by category: ${e.message}',
           code: e.response?.statusCode,
         );
       }

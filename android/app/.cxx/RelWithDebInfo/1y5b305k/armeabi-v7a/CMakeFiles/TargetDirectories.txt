@@ -1,0 +1,2 @@
+/Users/admin/Documents/alsama_ecommerce/alsama/android/app/.cxx/RelWithDebInfo/1y5b305k/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/admin/Documents/alsama_ecommerce/alsama/android/app/.cxx/RelWithDebInfo/1y5b305k/armeabi-v7a/CMakeFiles/rebuild_cache.dir

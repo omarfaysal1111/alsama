@@ -1,4 +1,5 @@
 import '../../domain/entities/product.dart';
+import '../../domain/entities/category.dart';
 
 abstract class ProductsState {}
 
@@ -65,9 +66,19 @@ class RelatedProductsLoaded extends ProductsState {
 }
 
 class CategoriesLoaded extends ProductsState {
-  final List<String> categories;
+  final List<ProductCategory> categories;
   
   CategoriesLoaded({required this.categories});
+}
+
+class ModelsByCategoryLoaded extends ProductsState {
+  final List<Product> products;
+  final int categoryId;
+  
+  ModelsByCategoryLoaded({
+    required this.products,
+    required this.categoryId,
+  });
 }
 
 class ProductsError extends ProductsState {

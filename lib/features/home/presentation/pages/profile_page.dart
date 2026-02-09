@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/routes/app_routes.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -59,17 +60,45 @@ class ProfilePage extends StatelessWidget {
             FavoriteHeaderCard(
               title: 'المفضلة',
               icons: Icons.favorite_border_outlined,
-              onClick: () {},
+              onClick: () {
+                Navigator.pushNamed(context, AppRoutes.wishlist);
+              },
             ),
 
-             Padding(
-               padding:  EdgeInsets.only(top: height*0.016),
-               child: FavoriteHeaderCard(
+            Padding(
+              padding: EdgeInsets.only(top: height * 0.016),
+              child: FavoriteHeaderCard(
+                title: 'طلباتي',
+                icons: Icons.shopping_bag_outlined,
+                onClick: () {
+                  // TODO: Uncomment when OrdersPage is ready
+                  // Navigator.pushNamed(context, '/orders');
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('صفحة الطلبات قيد التطوير'),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                },
+              ),
+            ),
+
+            Padding(
+              padding: EdgeInsets.only(top: height * 0.016),
+              child: FavoriteHeaderCard(
                 title: 'عنواني',
                 icons: Icons.location_on_outlined,
-                onClick: () {},
-                           ),
-             ),
+                onClick: () {
+                  // TODO: Create addresses page
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('صفحة العناوين قيد التطوير'),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                },
+              ),
+            ),
 
 
 
@@ -88,17 +117,33 @@ class ProfilePage extends StatelessWidget {
             FavoriteHeaderCard(
               title: 'الإعدادات',
               icons: Icons.settings,
-              onClick: () {},
+              onClick: () {
+                // TODO: Create settings page
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('صفحة الإعدادات قيد التطوير'),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              },
             ),
 
-             Padding(
-               padding:  EdgeInsets.only(top: height*0.016),
-               child: FavoriteHeaderCard(
+            Padding(
+              padding: EdgeInsets.only(top: height * 0.016),
+              child: FavoriteHeaderCard(
                 title: 'مركز المساعدة',
                 icons: Icons.help_center_outlined,
-                onClick: () {},
-                           ),
-             ),
+                onClick: () {
+                  // TODO: Create help page
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('صفحة المساعدة قيد التطوير'),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

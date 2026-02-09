@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/errors/failures.dart';
 import '../entities/product.dart';
+import '../entities/category.dart';
 
 abstract class ProductsRepository {
   Future<Either<Failure, List<Product>>> getProducts({
@@ -18,7 +19,9 @@ abstract class ProductsRepository {
   
   Future<Either<Failure, List<Product>>> getRelatedProducts(String productId);
   
-  Future<Either<Failure, List<String>>> getCategories();
+  Future<Either<Failure, List<ProductCategory>>> getCategories();
+  
+  Future<Either<Failure, List<Product>>> getModelsByCategory(int categoryId);
   
   Future<Either<Failure, List<Product>>> searchProducts(String query);
 }

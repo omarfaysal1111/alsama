@@ -9,7 +9,7 @@ class Product {
   final List<ProductImage> imageURLs;
   final String parent;
   final ProductBrand brand;
-  final ProductCategory category;
+  final ProductCategoryInfo category;
   final List<ProductAdditionalInfo> additionalInformation;
   final bool featured;
   final int sellCount;
@@ -76,15 +76,15 @@ class ProductBrand {
   int get hashCode => name.hashCode;
 }
 
-class ProductCategory {
+class ProductCategoryInfo {
   final String name;
   
-  const ProductCategory({required this.name});
+  const ProductCategoryInfo({required this.name});
   
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is ProductCategory && other.name == name;
+    return other is ProductCategoryInfo && other.name == name;
   }
   
   @override
