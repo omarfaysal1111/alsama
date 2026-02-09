@@ -1,4 +1,4 @@
-import '../../domain/entities/order.dart';
+import '../../domain/entities/order.dart' as entities;
 
 abstract class OrdersState {}
 
@@ -7,7 +7,7 @@ class OrdersInitial extends OrdersState {}
 class OrdersLoading extends OrdersState {}
 
 class OrdersLoaded extends OrdersState {
-  final List<Order> orders;
+  final List<entities.Order> orders;
   final bool hasReachedMax;
   final int currentPage;
   final String? currentStatus;
@@ -20,7 +20,7 @@ class OrdersLoaded extends OrdersState {
   });
   
   OrdersLoaded copyWith({
-    List<Order>? orders,
+    List<entities.Order>? orders,
     bool? hasReachedMax,
     int? currentPage,
     String? currentStatus,
@@ -35,19 +35,19 @@ class OrdersLoaded extends OrdersState {
 }
 
 class OrderLoaded extends OrdersState {
-  final Order order;
+  final entities.Order order;
   
   OrderLoaded({required this.order});
 }
 
 class OrderCreated extends OrdersState {
-  final Order order;
+  final entities.Order order;
   
   OrderCreated({required this.order});
 }
 
 class OrderCancelled extends OrdersState {
-  final Order order;
+  final entities.Order order;
   
   OrderCancelled({required this.order});
 }
