@@ -1,5 +1,6 @@
+import 'package:alsama/features/auth/presentation/widgets/logout_dialog.dart';
+import 'package:alsama/features/home/presentation/pages/banner_widget.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/routes/app_routes.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -10,8 +11,10 @@ class ProfilePage extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
         foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        elevation: 0,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -46,7 +49,7 @@ class ProfilePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            SizedBox(height: height * 0.03),
+            SizedBox(height: height * 0.04),
             Text(
               ' خيارات الحساب',
               style: TextStyle(
@@ -55,7 +58,7 @@ class ProfilePage extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            SizedBox(height: height * 0.014),
+            SizedBox(height: height * 0.016),
 
             FavoriteHeaderCard(
               title: 'المفضلة',
@@ -83,47 +86,25 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
 
-            Padding(
-              padding: EdgeInsets.only(top: height * 0.016),
-              child: FavoriteHeaderCard(
-                title: 'عنواني',
-                icons: Icons.location_on_outlined,
-                onClick: () {
-                  // TODO: Create addresses page
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('صفحة العناوين قيد التطوير'),
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
-                },
-              ),
-            ),
-
-
-
-
-              SizedBox(height: height * 0.03),
-            Text(
-              'الإعدادات & المساعدة',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            SizedBox(height: height * 0.014),
+            //  Padding(
+            //    padding:  EdgeInsets.only(top: height*0.016),
+            //    child: FavoriteHeaderCard(
+            //     title: 'عنواني',
+            //     icons: Icons.location_on_outlined,
+            //     onClick: () {},
+            //                ),
+            //  ),
+            SizedBox(height: height * 0.016),
 
             FavoriteHeaderCard(
-              title: 'الإعدادات',
-              icons: Icons.settings,
+              title: 'تسجيل الخروج',
+              icons: Icons.logout_outlined,
               onClick: () {
-                // TODO: Create settings page
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('صفحة الإعدادات قيد التطوير'),
-                    duration: Duration(seconds: 2),
-                  ),
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return LogoutDialog();
+                  },
                 );
               },
             ),
@@ -131,19 +112,18 @@ class ProfilePage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(top: height * 0.016),
               child: FavoriteHeaderCard(
-                title: 'مركز المساعدة',
-                icons: Icons.help_center_outlined,
-                onClick: () {
-                  // TODO: Create help page
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('صفحة المساعدة قيد التطوير'),
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
-                },
+                textColor: Color(0xff821F40),
+                iconColor: Color(0xff821F40),
+                title: ' حذف الحساب',
+
+                icons: Icons.person_off_outlined,
+
+                onClick: () {},
               ),
             ),
+            SizedBox(height: 40),
+
+            //  BannerSlider(),
           ],
         ),
       ),
@@ -155,12 +135,15 @@ class FavoriteHeaderCard extends StatelessWidget {
   final String title;
   final VoidCallback? onClick;
   final IconData icons;
-
+  final Color? iconColor;
+  final Color? textColor;
   const FavoriteHeaderCard({
     super.key,
     required this.title,
     required this.onClick,
     required this.icons,
+    this.iconColor,
+    this.textColor,
   });
 
   @override
@@ -170,33 +153,33 @@ class FavoriteHeaderCard extends StatelessWidget {
       height: 60,
       color: const Color(0xffF8F8F8),
       padding: EdgeInsets.symmetric(horizontal: width * 0.04),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            onPressed: onClick,
-            icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
-          ),
+      child: GestureDetector(
+        onTap: onClick,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Icon(Icons.arrow_back_ios_new, color: Colors.black),
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                title,
-                textDirection: TextDirection.rtl,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  title,
+                  textDirection: TextDirection.rtl,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: textColor ?? Colors.black,
+                  ),
                 ),
-              ),
 
-              SizedBox(width: width * 0.012),
+                SizedBox(width: width * 0.012),
 
-              Icon(icons, color: Colors.black),
-            ],
-          ),
-        ],
+                Icon(icons, color: iconColor ?? Colors.black),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:alsama/features/auth/presentation/widgets/default_button.dart';
 import 'package:flutter/material.dart';
 
 class FilterWidget extends StatefulWidget {
@@ -151,22 +152,31 @@ class _FilterWidgetState extends State<FilterWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextButton(
+
+
+                      
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('إلغاء'),
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xff7D173C),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 30,
-                          vertical: 10,
+                      child:  Text(
+                        'إلغاء',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14
                         ),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('تأكيد'),
+                        ),
                     ),
+
+                    SizedBox(
+                      width:width*(132/390) ,
+                      height: height*(40/844),
+                      child: DefaultButton(text: 'تأكيد', onTap: (){
+                                                Navigator.pop(context);
+                      
+                      
+                      }),
+                    )
+
+                    
+                    
                   ],
                 ),
               ],

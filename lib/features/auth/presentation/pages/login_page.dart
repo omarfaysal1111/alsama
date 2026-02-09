@@ -27,6 +27,8 @@ class LoginPage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(top: height * 0.2),
               child: TextFieldRegister(
+                keyboardType: keyboardT.email,
+
                 emailController: emailController,
                 hinttext: 'البريد الالكتروني',
                 icon: Icons.email_outlined,
@@ -37,6 +39,8 @@ class LoginPage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(top: 16),
               child: TextFieldRegister(
+                keyboardType: keyboardT.email,
+
                 emailController: passwordController,
                 hinttext: ' كلمة المرور',
                 icon: Icons.lock_outline,
@@ -64,6 +68,8 @@ class LoginPage extends StatelessWidget {
                     style: TextStyle(color: Color(0xff821F40), fontSize: 14),
                   ),
                 ),
+                SizedBox(width: 4),
+
                 Text(
                   'ليس لديك حساب؟',
                   style: TextStyle(color: Color(0xff333333), fontSize: 14),

@@ -1,5 +1,6 @@
-// import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+
+enum keyboardT { text, number, email }
 
 class TextFieldRegister extends StatelessWidget {
   final TextEditingController emailController;
@@ -7,6 +8,7 @@ class TextFieldRegister extends StatelessWidget {
   final String hinttext;
   final IconData icon;
   final Widget? prefixIcon;
+  final keyboardT keyboardType;
 
   const TextFieldRegister({
     super.key,
@@ -15,17 +17,26 @@ class TextFieldRegister extends StatelessWidget {
     required this.hinttext,
     required this.icon,
     this.prefixIcon,
+    required this.keyboardType,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      keyboardType:
+          keyboardType == keyboardT.number
+              ? TextInputType.number
+              : keyboardType == keyboardT.email
+              ? TextInputType.emailAddress
+              : TextInputType.text,
+
       controller: emailController,
       textDirection: TextDirection.rtl,
       textAlign: TextAlign.right,
       onChanged: onChanged,
       decoration: InputDecoration(
         hintText: hinttext,
+
         hintStyle: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w400,

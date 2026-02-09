@@ -5,5 +5,8 @@ import 'app.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.configureDependencies();
-  runApp(const MyApp());
+  runApp( Directionality(
+      textDirection: TextDirection.rtl,
+      child: const MyApp(),
+    ),);
 }

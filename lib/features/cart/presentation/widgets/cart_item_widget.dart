@@ -140,7 +140,7 @@ class CartItemCard extends StatelessWidget {
                                     color: Color.fromARGB(255, 248, 248, 248),
                                     border: Border.all(
                                       width:1 ,
-                                      color: Color(0xff55585B),
+                                        color: Color.fromARGB(255, 214, 214, 214),
                                     ),
                                   ),
                                   child: Row(
