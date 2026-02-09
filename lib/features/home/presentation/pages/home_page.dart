@@ -200,9 +200,9 @@ class _HomePageState extends State<HomePage> {
                         }
                       },
                     ),
+SizedBox(height: 16,),
 
                     BannerSlider(),
-SizedBox(height: 20,),
 
 
                     Padding(

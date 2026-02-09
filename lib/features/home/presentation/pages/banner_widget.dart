@@ -30,7 +30,7 @@ class _BannerSliderState extends State<BannerSlider> {
           CarouselSlider(
             carouselController: _controller,
             options: CarouselOptions(
-              height: 190.0,
+              height: 200.0,
               autoPlay: true,
               autoPlayInterval: Duration(seconds: 3),
               viewportFraction: 1.0,
@@ -38,7 +38,7 @@ class _BannerSliderState extends State<BannerSlider> {
             ),
             items: imgList.map((item) => Container(
               width: 190,
-              height: 120,
+              height: 100,
             
               child: Image.asset(
                 item,

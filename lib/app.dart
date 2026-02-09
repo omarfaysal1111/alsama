@@ -1,6 +1,7 @@
 import 'package:alsama/features/auth/presentation/pages/login_page.dart';
 import 'package:alsama/features/auth/presentation/pages/register_page.dart';
 import 'package:alsama/features/cart/presentation/pages/cart_page.dart';
+import 'package:alsama/features/home/presentation/pages/home_page.dart';
 import 'package:alsama/features/home/presentation/pages/profile_page.dart';
 import 'package:alsama/features/home/presentation/pages/wishlist_page.dart';
 import 'package:alsama/features/products/presentation/pages/product_detail_page.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Cairo', 
           scaffoldBackgroundColor: Colors.white,
           primarySwatch: Colors.blue, useMaterial3: true),
-        home:  ProductDetailPage(),
+        home:  MainPage(),
         debugShowCheckedModeBanner: false,
       ),
 

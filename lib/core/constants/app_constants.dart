@@ -2,7 +2,7 @@ class AppConstants {
   // API Constants
   static const String baseUrl = 'https://api.alfaysalerp.com';
   static const String apiVersion = 'v1';
-  static const String bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJfMjg1XzIiLCJQcmV2WWVhciI6IjAiLCJuYmYiOjE3NjAzNjU1NjMsImV4cCI6MjA3NTg5ODM2MywiaWF0IjoxNzYwMzY1NTYzfQ.Ia75WUwupDhJbPdDe8y2-hBT-12PQp-QounikVq7flA';
+  static const String bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNhbWEtZWMiLCJQcmV2WWVhciI6IjAiLCJuYmYiOjE3NjM4MzE3MzYsImV4cCI6MjA3OTM2NDUzNiwiaWF0IjoxNzYzODMxNzM2fQ.nLyX3wDihuPdIpX7E12rWO_LkAZxrWWXbRCDflxERSc';
   
   // App Constants
   static const String appName = 'Alsama';
