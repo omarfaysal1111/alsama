@@ -13,6 +13,8 @@ class Product {
   final List<ProductAdditionalInfo> additionalInformation;
   final bool featured;
   final int sellCount;
+  final String? colorId;  // Added for order creation
+  final String? sizeId;   // Added for order creation
   
   const Product({
     required this.id,
@@ -29,7 +31,48 @@ class Product {
     required this.additionalInformation,
     required this.featured,
     required this.sellCount,
+    this.colorId,
+    this.sizeId,
   });
+  
+  // Add copyWith method to update colorId and sizeId
+  Product copyWith({
+    String? id,
+    String? title,
+    String? description,
+    double? price,
+    double? discount,
+    int? quantity,
+    String? img,
+    List<ProductImage>? imageURLs,
+    String? parent,
+    ProductBrand? brand,
+    ProductCategoryInfo? category,
+    List<ProductAdditionalInfo>? additionalInformation,
+    bool? featured,
+    int? sellCount,
+    String? colorId,
+    String? sizeId,
+  }) {
+    return Product(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      price: price ?? this.price,
+      discount: discount ?? this.discount,
+      quantity: quantity ?? this.quantity,
+      img: img ?? this.img,
+      imageURLs: imageURLs ?? this.imageURLs,
+      parent: parent ?? this.parent,
+      brand: brand ?? this.brand,
+      category: category ?? this.category,
+      additionalInformation: additionalInformation ?? this.additionalInformation,
+      featured: featured ?? this.featured,
+      sellCount: sellCount ?? this.sellCount,
+      colorId: colorId ?? this.colorId,
+      sizeId: sizeId ?? this.sizeId,
+    );
+  }
   
   double get finalPrice => price - discount;
   bool get isInStock => quantity > 0;

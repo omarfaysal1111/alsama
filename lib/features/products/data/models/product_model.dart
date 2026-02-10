@@ -16,6 +16,8 @@ class ProductModel extends Product {
     required super.additionalInformation,
     required super.featured,
     required super.sellCount,
+    super.colorId,
+    super.sizeId,
   });
   
   factory ProductModel.fromJson(Map<String, dynamic> json) {
@@ -38,6 +40,8 @@ class ProductModel extends Product {
           .toList() ?? [],
       featured: json['featured'] as bool? ?? false,
       sellCount: json['sellCount'] as int? ?? 0,
+      colorId: json['colorid']?.toString() ?? json['colorId']?.toString(),
+      sizeId: json['sizeid']?.toString() ?? json['sizeId']?.toString(),
     );
   }
   
@@ -57,6 +61,8 @@ class ProductModel extends Product {
       'additionalInformation': additionalInformation.map((e) => (e as ProductAdditionalInfoModel).toJson()).toList(),
       'featured': featured,
       'sellCount': sellCount,
+      if (colorId != null) 'colorid': colorId,
+      if (sizeId != null) 'sizeid': sizeId,
     };
   }
   
@@ -76,6 +82,8 @@ class ProductModel extends Product {
       additionalInformation: product.additionalInformation,
       featured: product.featured,
       sellCount: product.sellCount,
+      colorId: product.colorId,
+      sizeId: product.sizeId,
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'package:alsama/features/home/presentation/bloc/categories_state.dart'
+    as home_categories;
 import 'package:alsama/features/home/presentation/pages/banner_widget.dart';
 import 'package:alsama/features/home/presentation/pages/menu_widget.dart';
 import 'package:flutter/material.dart';

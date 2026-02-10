@@ -197,7 +197,7 @@ class _CartPageState extends State<CartPage> {
                               onTap: () {
                                 Navigator.pushNamed(
                                   context,
-                                  AppRoutes.checkout,
+                                  '/enhanced-checkout',
                                 );
                               },
                             ),

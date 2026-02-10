@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uuid/uuid.dart';
 
+import '../../../../core/routes/app_routes.dart';
+import '../../../auth/presentation/bloc/auth_bloc.dart';
+import '../../../auth/presentation/bloc/auth_state.dart';
 import '../../../auth/presentation/widgets/default_button.dart';
 import '../../../orders/domain/entities/order.dart';
 import '../../../orders/presentation/bloc/orders_bloc.dart';
@@ -60,43 +62,49 @@ class _EnhancedCheckoutPageState extends State<EnhancedCheckoutPage> {
       return;
     }
 
-    // Calculate totals
-    final subtotal = cartState.total;
-    final tax = subtotal * _taxRate;
-    final total = subtotal + _shippingCost + tax;
+    // Get user info from AuthBloc
+    final authState = context.read<AuthBloc>().state;
+    String custId = '';
+    String userName = '';
+    String userPhone = '';
+    String userEmail = '';
+    
+    if (authState is Authenticated) {
+      custId = authState.user.id;
+      userName = authState.user.name;
+      userPhone = authState.user.phone ?? '';
+      userEmail = authState.user.email;
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('الرجاء تسجيل الدخول أولاً'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      Navigator.pushReplacementNamed(context, AppRoutes.login);
+      return;
+    }
 
-    // Create order data
+    // Create order data according to API documentation
     final orderData = {
-      'userId': 'user_285_2', // TODO: Get from auth state
-      'items': cartState.cartItems.map((item) {
+      'custid': custId,
+      'name': userName,
+      'phone': userPhone,
+      'address': _shippingAddress!['addressLine1'] ?? '',
+      'email': userEmail,
+      'rows': cartState.cartItems.map((item) {
         return {
-          'id': const Uuid().v4(),
-          'productId': item.product.id,
-          'productTitle': item.product.title,
-          'productImage': item.product.img,
+          'modelid': item.product.id.toString(),
+          'colorid': item.product.colorId?.toString() ?? '1',  // Default to 1 if no color
+          'sizeid': item.product.sizeId?.toString() ?? '1',    // Default to 1 if no size
           'price': item.product.price,
-          'discount': item.product.discount,
-          'quantity': item.quantity,
+          'qty': item.quantity,
         };
       }).toList(),
-      'subtotal': subtotal,
-      'discount': 0.0,
-      'shipping': _shippingCost,
-      'tax': tax,
-      'total': total,
-      'status': 'pending',
-      'paymentMethod': _paymentMethodToString(_paymentMethod),
-      'paymentStatus': 'pending',
-      'shippingAddress': _shippingAddress,
-      'createdAt': DateTime.now().toIso8601String(),
     };
 
     // Dispatch create order event
     context.read<OrdersBloc>().add(CreateOrderRequested(orderData: orderData));
-  }
-
-  String _paymentMethodToString(PaymentMethod method) {
-    return method.toString().split('.').last;
   }
 
   @override

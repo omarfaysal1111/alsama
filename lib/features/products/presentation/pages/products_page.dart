@@ -10,7 +10,7 @@ import '../../../../core/routes/app_routes.dart';
 import '../../../cart/presentation/widgets/cart_icon_button.dart';
 
 class ProductsPage extends StatefulWidget {
-  const ProductsPage({super.key});
+  const ProductsPage({super.key, required category, required categoryLabel});
 
   @override
   State<ProductsPage> createState() => _ProductsPageState();

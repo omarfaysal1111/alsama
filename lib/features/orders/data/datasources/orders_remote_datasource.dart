@@ -142,9 +142,51 @@ class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final responseData = response.data;
-        
-        // Handle API response structure
+
         if (responseData is Map<String, dynamic>) {
+          // addorder docs: successful response is { "message": 0 }
+          if (responseData['message'] == 0) {
+            final rows = (orderData['rows'] as List<dynamic>?) ?? <dynamic>[];
+            final items = rows.map((row) {
+              final rowMap = row as Map<String, dynamic>;
+              return {
+                'id': '',
+                'productId': rowMap['modelid']?.toString() ?? '',
+                'productTitle': '',
+                'productImage': '',
+                'price': rowMap['price'] ?? 0,
+                'discount': 0,
+                'quantity': rowMap['qty'] ?? 1,
+                'size': rowMap['sizeid']?.toString(),
+                'color': rowMap['colorid']?.toString(),
+              };
+            }).toList();
+
+            return OrderModel.fromJson({
+              'id': '',
+              'userId': orderData['custid']?.toString() ?? '',
+              'items': items,
+              'subtotal': 0,
+              'discount': 0,
+              'shipping': 0,
+              'tax': 0,
+              'total': 0,
+              'status': 'pending',
+              'paymentMethod': 'cashOnDelivery',
+              'paymentStatus': 'pending',
+              'shippingAddress': {
+                'fullName': orderData['name']?.toString() ?? '',
+                'phone': orderData['phone']?.toString() ?? '',
+                'address': orderData['address']?.toString() ?? '',
+                'city': '',
+                'state': '',
+                'country': '',
+                'postalCode': '',
+              },
+              'createdAt': DateTime.now().toIso8601String(),
+            });
+          }
+
           if (responseData.containsKey('order')) {
             return OrderModel.fromJson(responseData['order']);
           } else if (responseData.containsKey('data')) {

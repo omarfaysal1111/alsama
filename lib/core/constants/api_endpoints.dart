@@ -1,40 +1,40 @@
 class ApiEndpoints {
   // Base URL
-  static const String baseUrl = 'https://api.alfaysalerp.com';
+  static const String baseUrl = 'https://api.alfaysalerp.com/fashion';
 
   // Auth endpoints
-  static const String login = '/auth/login';
-  static const String register = '/auth/register';
-  static const String logout = '/auth/logout';
-  static const String refreshToken = '/auth/refresh';
+  static const String login = '$baseUrl/clientLogin';
+  static const String register = '$baseUrl/register';
+  static const String logout = '$baseUrl/auth/logout';
+  static const String refreshToken = '$baseUrl/auth/refresh';
 
   // Products endpoints
-  static const String getAllProducts = '$baseUrl/fashion/getallProducts';
-  static const String getProductById = '/fashion/product';
-  static const String searchProducts = '/fashion/search';
-  static const String getFeaturedProducts = '/fashion/featured';
-  
+  static const String getAllProducts = '$baseUrl/getallProducts';
+  static const String getProductById = '$baseUrl/product';
+  static const String searchProducts = '$baseUrl/search';
+  static const String getFeaturedProducts = '$baseUrl/featured';
+
   // Categories endpoints
-  static const String getCategories = '$baseUrl/fashion/GetCatrgories';
-  static const String getModelsByCategory = '$baseUrl/fashion/GetModels';
+  static const String getCategories = '$baseUrl/GetCatrgories';
+  static const String getModelsByCategory = '$baseUrl/GetModels';
 
   // Cart endpoints
-  static const String getCart = '/cart';
-  static const String addToCart = '/cart/add';
-  static const String updateCartItem = '/cart/update';
-  static const String removeFromCart = '/cart/remove';
-  static const String clearCart = '/cart/clear';
+  static const String getCart = '$baseUrl/cart';
+  static const String addToCart = '$baseUrl/cart/add';
+  static const String updateCartItem = '$baseUrl/cart/update';
+  static const String removeFromCart = '$baseUrl/cart/remove';
+  static const String clearCart = '$baseUrl/cart/clear';
 
   // Orders endpoints
-  static const String getOrders = '/orders';
-  static const String createOrder = '/orders/create';
-  static const String getOrderById = '/orders';
-  static const String cancelOrder = '/orders/cancel';
-  static const String trackOrder = '/orders/track';
+  static const String getOrders = '$baseUrl/orders';
+  static const String createOrder = '$baseUrl/addorder';
+  static const String getOrderById = '$baseUrl/orders';
+  static const String cancelOrder = '$baseUrl/orders/cancel';
+  static const String trackOrder = '$baseUrl/orders/track';
 
   // Profile endpoints
-  static const String getProfile = '/profile';
-  static const String updateProfile = '/profile/update';
-  static const String changePassword = '/profile/change-password';
-  static const String uploadAvatar = '/profile/avatar';
+  static const String getProfile = '$baseUrl/profile';
+  static const String updateProfile = '$baseUrl/profile/update';
+  static const String changePassword = '$baseUrl/profile/change-password';
+  static const String uploadAvatar = '$baseUrl/profile/avatar';
 }

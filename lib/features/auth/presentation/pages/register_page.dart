@@ -1,27 +1,107 @@
 import 'package:alsama/features/auth/presentation/widgets/default_button.dart';
 import 'package:alsama/features/auth/presentation/widgets/register_form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/routes/app_routes.dart';
+import '../bloc/auth_bloc.dart';
+import '../bloc/auth_event.dart';
+import '../bloc/auth_state.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
   @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController loc1Controller = TextEditingController();
+  final TextEditingController loc2Controller = TextEditingController();
+  
+  final ValueNotifier<bool> isChecked = ValueNotifier(false);
+  final ValueNotifier<bool> isChecked2 = ValueNotifier(false);
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    usernameController.dispose();
+    phoneController.dispose();
+    loc1Controller.dispose();
+    loc2Controller.dispose();
+    isChecked.dispose();
+    isChecked2.dispose();
+    super.dispose();
+  }
+
+  void _handleRegister() {
+    if (!isChecked2.value) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('يجب الموافقة على الشروط والأحكام'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    if (emailController.text.isEmpty ||
+        passwordController.text.isEmpty ||
+        usernameController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('الرجاء ملء جميع الحقول المطلوبة'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    context.read<AuthBloc>().add(
+      RegisterRequested(
+        email: emailController.text,
+        password: passwordController.text,
+        name: usernameController.text,
+        phone: phoneController.text.isNotEmpty ? phoneController.text : null,
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    TextEditingController emailController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
-    TextEditingController usernameController = TextEditingController();
-    TextEditingController phoneController = TextEditingController();
-
-    TextEditingController loc1Controller = TextEditingController();
-    TextEditingController loc2Controller = TextEditingController();
-
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    final ValueNotifier<bool> isChecked = ValueNotifier(false);
-    final ValueNotifier<bool> isChecked2 = ValueNotifier(false);
 
     return Scaffold(
-      body: SingleChildScrollView(
+      body: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is Authenticated) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('تم التسجيل بنجاح'),
+                backgroundColor: Colors.green,
+              ),
+            );
+            Navigator.pushReplacementNamed(context, AppRoutes.home);
+          } else if (state is AuthError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
+        child: BlocBuilder<AuthBloc, AuthState>(
+          builder: (context, state) {
+            final isLoading = state is AuthLoading;
+            
+            return SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(
             top: height * 110 / 844,
@@ -214,14 +294,19 @@ class RegisterPage extends StatelessWidget {
 
               Padding(
                 padding: const EdgeInsets.only(top: 60.0),
-                child: DefaultButton(onTap: () {}, text: 'تسجيل الدخول'),
+                child: DefaultButton(
+                  onTap: isLoading ? () {} : _handleRegister,
+                  text: isLoading ? 'جاري التسجيل...' : 'تسجيل',
+                ),
               ),
               SizedBox(height: height * 0.02),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushReplacementNamed(context, AppRoutes.login);
+                    },
                     child: Text(
                       'سجّل دخولك',
                       style: TextStyle(color: Color(0xff821F40), fontSize: 14),
@@ -236,6 +321,9 @@ class RegisterPage extends StatelessWidget {
               ),
             ],
           ),
+        ),
+            );
+          },
         ),
       ),
     );
