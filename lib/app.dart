@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           useMaterial3: true,
         ),
-        home: ProductDetailPage(),
+        home: MainPage(),
         debugShowCheckedModeBanner: false,
       ),
     );

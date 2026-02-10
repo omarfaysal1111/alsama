@@ -1,3 +1,4 @@
+import 'package:alsama/features/home/presentation/bloc/categories_state.dart' as home_categories;
 import 'package:alsama/features/home/presentation/pages/banner_widget.dart';
 import 'package:alsama/features/home/presentation/pages/menu_widget.dart';
 import 'package:flutter/material.dart';
@@ -266,6 +267,23 @@ SizedBox(height: 16,),
                       ),
                     ),
 
+SizedBox(height:height * 0.02, ),
+                      Padding(
+                      padding: EdgeInsets.only(
+                        top: height * 0.02,
+                        bottom: height * 0.02,
+                      ),
+                      child: Text(
+                        textAlign: TextAlign.right,
+                        'منتجاتنا',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+
                     // Products Grid
                     Expanded(
                       child: GridView.builder(
@@ -369,6 +387,7 @@ class ProductCard extends StatelessWidget {
                 ],
               ),
             ),
+            
 
             // Product Details
             Expanded(
@@ -401,7 +420,10 @@ class ProductCard extends StatelessWidget {
                           style: TextStyle(
                             color: Color(0xff821F40),
                             fontWeight: FontWeight.w500,
-                            fontSize: 16,
+                            fontSize: 14
+                            ,
+                                                  overflow: TextOverflow.ellipsis,
+
                           ),
                         ),
                         if (product.hasDiscount) ...[

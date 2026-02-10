@@ -11,9 +11,9 @@ class _BannerSliderState extends State<BannerSlider> {
   final CarouselSliderController _controller = CarouselSliderController();
 
   final List<String> imgList = [
-    'assets/images/im1.jpeg',
-    'assets/images/im2.jpeg',
-    'assets/images/im3.jpeg',
+    'assets/images/im1.png',
+    'assets/images/im2.png',
+    'assets/images/im33.png',
   ];
 
   @override
@@ -22,22 +22,24 @@ class _BannerSliderState extends State<BannerSlider> {
       height: 200,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Color(0xffF8F8F8)
+        color: Color(0xffF8F8F8),
+        // border: Border.all(color: Color(0xffE0E2E3))
       ),
+      
       
       child: Stack(
         children: [
           CarouselSlider(
             carouselController: _controller,
             options: CarouselOptions(
-              height: 200.0,
+             // height: 200.0,
               autoPlay: true,
               autoPlayInterval: Duration(seconds: 3),
               viewportFraction: 1.0,
               enlargeCenterPage: false,
             ),
             items: imgList.map((item) => Container(
-              width: 190,
+            //  width: 190,
               height: 100,
             
               child: Image.asset(

@@ -128,7 +128,7 @@ class RegisterPage extends StatelessWidget {
                       valueListenable: isChecked,
                       builder: (context, value, _) {
                         return Transform.scale(
-                          scale: 1.0, // ممكن تغيري الحجم لو عايزة
+                          scale: 1.0, //    
                           child: Checkbox(
                             value: value,
                             onChanged: (newValue) {
