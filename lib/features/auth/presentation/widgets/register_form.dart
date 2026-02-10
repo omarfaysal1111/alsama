@@ -42,17 +42,20 @@ class TextFieldRegister extends StatelessWidget {
           fontWeight: FontWeight.w400,
           color: Color(0xffADAFB1),
         ),
-
+ contentPadding: const EdgeInsets.symmetric(
+      vertical: 14,
+      horizontal: 16,
+    ),
         prefixIcon: prefixIcon,
         suffixIcon: Icon(icon, size: 24, color: Color(0xff55585B)),
         filled: true,
         fillColor: const Color(0xffF8F8F8),
         enabledBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(0)),
+          borderRadius: BorderRadius.all(Radius.circular(8)),
           borderSide: BorderSide(color: Color(0xffE0E2E3), width: 1),
         ),
         focusedBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(0)),
+          borderRadius: BorderRadius.all(Radius.circular(8)),
           borderSide: BorderSide(color: Color(0xff821F40), width: 1),
         ),
       ),

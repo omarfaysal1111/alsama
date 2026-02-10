@@ -121,7 +121,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               child: Container(
                 width: double.infinity,
                 height: height * (400 / 844),
-                decoration: const BoxDecoration(color: Color(0xffF3F5F6)),
+                decoration:  BoxDecoration(color: Color(0xffF3F5F6),borderRadius: BorderRadius.circular(8)),
                 child: CachedNetworkImage(
                   imageUrl: widget.product.img,
                   fit: BoxFit.cover,
@@ -193,7 +193,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       height: height * (80 / 844),
                       child: Directionality(
                         textDirection: TextDirection.rtl,
+                        
                         child: ListView.builder(
+                          
                           scrollDirection: Axis.horizontal,
                           shrinkWrap: true,
                           itemCount: widget.product.imageURLs.length,
@@ -205,7 +207,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               ),
                               child: Container(
                                 width: width * (60 / 390),
-                                decoration: const BoxDecoration(
+                                decoration:  BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
                                   color: Color(0xffF3F5F6),
                                 ),
                                 child: CachedNetworkImage(
@@ -317,6 +320,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 height: 48,
                 items: colors,
                 selectedValue: selectedColor,
+                
                 hintText: 'اختر اللون',
                 onChanged: (value) {
                   setState(() {

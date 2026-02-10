@@ -73,74 +73,76 @@ class _LoginPageState extends State<LoginPage> {
           builder: (context, state) {
             final isLoading = state is AuthLoading;
 
-            return Padding(
-              padding: EdgeInsets.only(top: height * 136 / 844, left: 16, right: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-            Text(
-              '  تسجيل دخول',
-              style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
-            ),
-
-            Padding(
-              padding: EdgeInsets.only(top: height * 0.2),
-              child: TextFieldRegister(
-                keyboardType: keyboardT.email,
-
-                emailController: emailController,
-                hinttext: 'البريد الالكتروني أو اسم المستخدم',
-                icon: Icons.email_outlined,
-                onChanged: (value) {},
+            return SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.only(top: height * 136 / 844, left: 16, right: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+              Text(
+                '  تسجيل دخول',
+                style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
               ),
-            ),
-
-            Padding(
-              padding: EdgeInsets.only(top: 16),
-              child: TextFieldRegister(
-                keyboardType: keyboardT.email,
-
-                emailController: passwordController,
-                hinttext: ' كلمة المرور',
-                icon: Icons.lock_outline,
-
-                prefixIcon: Icon(
-                  Icons.remove_red_eye_outlined,
-                  color: Color(0xff55585B),
+              
+              Padding(
+                padding: EdgeInsets.only(top: height * 0.2),
+                child: TextFieldRegister(
+                  keyboardType: keyboardT.email,
+              
+                  emailController: emailController,
+                  hinttext: 'البريد الالكتروني أو اسم المستخدم',
+                  icon: Icons.email_outlined,
+                  onChanged: (value) {},
                 ),
-                onChanged: (value) {},
               ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.only(top: 90.0),
-              child: DefaultButton(
-                onTap: isLoading ? () {} : _handleLogin,
-                text: isLoading ? 'جاري تسجيل الدخول...' : 'تسجيل الدخول',
-              ),
-            ),
-            SizedBox(height: height * 0.02),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, AppRoutes.register);
-                  },
-                  child: Text(
-                    ' أنشئ حسابًا جديدً',
-                    style: TextStyle(color: Color(0xff821F40), fontSize: 14),
+              
+              Padding(
+                padding: EdgeInsets.only(top: 16),
+                child: TextFieldRegister(
+                  keyboardType: keyboardT.email,
+              
+                  emailController: passwordController,
+                  hinttext: ' كلمة المرور',
+                  icon: Icons.lock_outline,
+              
+                  prefixIcon: Icon(
+                    Icons.remove_red_eye_outlined,
+                    color: Color(0xff55585B),
                   ),
+                  onChanged: (value) {},
                 ),
-                SizedBox(width: 4),
-
-                Text(
-                  'ليس لديك حساب؟',
-                  style: TextStyle(color: Color(0xff333333), fontSize: 14),
+              ),
+              
+              Padding(
+                padding: const EdgeInsets.only(top: 90.0),
+                child: DefaultButton(
+                  onTap: isLoading ? () {} : _handleLogin,
+                  text: isLoading ? 'جاري تسجيل الدخول...' : 'تسجيل الدخول',
                 ),
-              ],
-            ),
-          ],
+              ),
+              SizedBox(height: height * 0.02),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, AppRoutes.register);
+                    },
+                    child: Text(
+                      ' أنشئ حسابًا جديدً',
+                      style: TextStyle(color: Color(0xff821F40), fontSize: 14),
+                    ),
+                  ),
+                  SizedBox(width: 4),
+              
+                  Text(
+                    'ليس لديك حساب؟',
+                    style: TextStyle(color: Color(0xff333333), fontSize: 14),
+                  ),
+                ],
+              ),
+                        ],
+                ),
               ),
             );
           },

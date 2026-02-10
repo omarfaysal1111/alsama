@@ -25,6 +25,7 @@ class DefaultButton extends StatelessWidget {
         height: 56,
         alignment: Alignment.center,
         decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
           color: backgroundColor,
         ),
         child: Text(

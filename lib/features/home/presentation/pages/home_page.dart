@@ -156,154 +156,154 @@ class _HomePageState extends State<HomePage> {
               onRefresh: () async {
                 context.read<ProductsBloc>().add(RefreshProductsRequested());
               },
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: width * 0.04),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    TextField(
-                      textDirection: TextDirection.rtl,
-                      textAlign: TextAlign.right,
-                      decoration: InputDecoration(
-                        hintText: '...ابحث هنا',
-                        hintStyle: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xffADAFB1),
-                        ),
-                        suffixIcon: const Icon(
-                          Icons.search,
-                          size: 24,
-                          color: Color(0xff55585B),
-                        ),
-
-                        filled: true,
-
-                        fillColor: Color(0xffF8F8F8),
-                        // border: OutlineInputBorder(
-                        //   borderRadius: BorderRadius.all(Radius.zero),
-                        //   borderSide: BorderSide(color: Color(0xffE0E2E3,), width: 0.5)
-                        // ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(0)),
-                          borderSide: BorderSide(
-                            color: const Color(0xffE0E2E3),
-                            width: 1,
-                          ),
-                        ),
-
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(0)),
-                          borderSide: BorderSide(
-                            color: Color(0xff821F40),
-                            width: 1,
-                          ),
+              child:  ListView(
+  physics: const BouncingScrollPhysics(),
+  padding: EdgeInsets.symmetric(horizontal: width * 0.04),
+  children: [
+                  TextField(
+                    textDirection: TextDirection.rtl,
+                    textAlign: TextAlign.right,
+                    decoration: InputDecoration(
+                      hintText: '...ابحث هنا',
+                      
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xffADAFB1),
+                      ),
+                      suffixIcon: const Icon(
+                        Icons.search,
+                        size: 24,
+                        color: Color(0xff55585B),
+                      ),
+              
+                      filled: true,
+              
+                      fillColor: Color(0xffF8F8F8),
+                      // border: OutlineInputBorder(
+                      //   borderRadius: BorderRadius.all(Radius.zero),
+                      //   borderSide: BorderSide(color: Color(0xffE0E2E3,), width: 0.5)
+                      // ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                        borderSide: BorderSide(
+                          color: const Color(0xffE0E2E3),
+                          width: 1,
                         ),
                       ),
-                      onSubmitted: (query) {
-                        if (query.isNotEmpty) {
-                          context.read<ProductsBloc>().add(
-                            SearchProductsRequested(query: query),
+              
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                        borderSide: BorderSide(
+                          color: Color(0xff821F40),
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                    onSubmitted: (query) {
+                      if (query.isNotEmpty) {
+                        context.read<ProductsBloc>().add(
+                          SearchProductsRequested(query: query),
+                        );
+                      }
+                    },
+                  ),
+                  SizedBox(height: 16),
+              
+                  BannerSlider(),
+                  SizedBox(height: 24),
+              
+                  Padding(
+                    padding: EdgeInsets.only(
+                      // top: height * 0.02,
+                      bottom: height * 0.02,
+                    ),
+                    child: Text(
+                      textAlign: TextAlign.right,
+                      'الأقسام',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+              
+                  SizedBox(
+                    height: 100,
+                    child: BlocBuilder<CategoriesBloc, CategoriesState>(
+                      builder: (context, categoryState) {
+                        if (categoryState is CategoriesLoading) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
                           );
                         }
+              
+                        if (categoryState
+                                is home_categories.CategoriesLoaded &&
+                            categoryState.categories.isNotEmpty) {
+                          final List<HomeCategory> categories =
+                              categoryState.categories;
+                          return ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            reverse: true,
+                            separatorBuilder:
+                                (context, index) =>
+                                    SizedBox(width: width * 0.04),
+                            itemCount: categories.length,
+                            itemBuilder: (context, index) {
+                              final category = categories[index];
+                              return _CategoryChip(
+                                category: category,
+                                onTap: () => _openCategory(context, category),
+                              );
+                            },
+                          );
+                        }
+              
+                        return const Center(
+                          child: Text('لا توجد أقسام متاحة الآن'),
+                        );
                       },
                     ),
-                    SizedBox(height: 16),
-
-                    BannerSlider(),
-                    SizedBox(height: 20),
-
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: height * 0.02,
-                        bottom: height * 0.02,
-                      ),
-                      child: Text(
-                        textAlign: TextAlign.right,
-                        'الأقسام',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                        ),
+                  ),
+              
+                  SizedBox(height: height * 0.02),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: height * 0.02,
+                      // bottom: height * 0.02,
+                    ),
+                    child: Text(
+                      textAlign: TextAlign.right,
+                      'منتجاتنا',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
                       ),
                     ),
+                  ),
+              
+                  // Products Grid
+                  GridView.builder(
+                    shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(), 
 
-                    SizedBox(
-                      height: 80,
-                      child: BlocBuilder<CategoriesBloc, CategoriesState>(
-                        builder: (context, categoryState) {
-                          if (categoryState is CategoriesLoading) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-
-                          if (categoryState
-                                  is home_categories.CategoriesLoaded &&
-                              categoryState.categories.isNotEmpty) {
-                            final List<HomeCategory> categories =
-                                categoryState.categories;
-                            return ListView.separated(
-                              scrollDirection: Axis.horizontal,
-                              reverse: true,
-                              separatorBuilder:
-                                  (context, index) =>
-                                      SizedBox(width: width * 0.04),
-                              itemCount: categories.length,
-                              itemBuilder: (context, index) {
-                                final category = categories[index];
-                                return _CategoryChip(
-                                  category: category,
-                                  onTap: () => _openCategory(context, category),
-                                );
-                              },
-                            );
-                          }
-
-                          return const Center(
-                            child: Text('لا توجد أقسام متاحة الآن'),
-                          );
-                        },
-                      ),
+                    padding: EdgeInsets.only(top: height * 0.02),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.66,
+                      crossAxisSpacing: height * 0.02,
+                      mainAxisSpacing: width * 0.04,
                     ),
-
-                    SizedBox(height: height * 0.02),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: height * 0.02,
-                        bottom: height * 0.02,
-                      ),
-                      child: Text(
-                        textAlign: TextAlign.right,
-                        'منتجاتنا',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-
-                    // Products Grid
-                    Expanded(
-                      child: GridView.builder(
-                        padding: EdgeInsets.only(top: height * 0.02),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.66,
-                          crossAxisSpacing: height * 0.02,
-                          mainAxisSpacing: width * 0.04,
-                        ),
-                        itemCount: state.products.length,
-                        itemBuilder: (context, index) {
-                          final product = state.products[index];
-                          return ProductCard(product: product);
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                    itemCount: state.products.length,
+                    itemBuilder: (context, index) {
+                      final product = state.products[index];
+                      return ProductCard(product: product);
+                    },
+                  ),
+                ],
               ),
             );
           }
@@ -336,7 +336,7 @@ class ProductCard extends StatelessWidget {
       child: Card(
         elevation: 0,
         color: Color(0xffF8F8F8),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -349,13 +349,13 @@ class ProductCard extends StatelessWidget {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(0),
+                        top: Radius.circular(6),
                       ),
                       color: Color(0xffF3F5F6),
                     ),
                     child: ClipRRect(
                       borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(0),
+                        top: Radius.circular(6),
                       ),
                       child: CachedNetworkImage(
                         imageUrl: product.img,
@@ -500,42 +500,66 @@ class _CategoryChip extends StatelessWidget {
 
     return Column(
       children: [
-        GestureDetector(
-          onTap: onTap,
-          child: Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              color: const Color(0xffF3F5F6),
-              border: Border.all(color: const Color(0xffE0E2E3)),
-            ),
-            child: ClipRRect(
-              child:
-                  category.img.isNotEmpty
-                      ? CachedNetworkImage(
-                        imageUrl: category.img,
-                        fit: BoxFit.cover,
-                        errorWidget:
-                            (context, url, error) => Image.asset(
-                              'assets/images/fashion.png',
-                              fit: BoxFit.cover,
-                            ),
-                      )
-                      : Image.asset(
-                        'assets/images/fashion.png',
-                        fit: BoxFit.cover,
-                      ),
+        Material(
+color: Colors.transparent,
+          shape: CircleBorder(),
+          child: InkResponse(
+            onTap: onTap,
+              splashFactory: InkRipple.splashFactory, 
+              containedInkWell: true,
+              radius: 40,
+overlayColor: MaterialStateProperty.resolveWith<Color?>(
+    (states) {
+      if (states.contains(MaterialState.pressed)) {
+        return Color(0xff821F40).withOpacity(0.3);
+      }
+      return null;
+    },
+  ),
+            child: Container(
+              width: 70,
+              height:70,
+              decoration: BoxDecoration(
+                color: const Color(0xffF3F5F6),
+          shape:BoxShape.circle ,
+                border: Border.all(color: const Color(0xffE0E2E3)),
+              ),
+              child: ClipOval(
+                child:
+                    category.img.isNotEmpty
+                        ? CachedNetworkImage(
+                          imageUrl: category.img,
+                          fit: BoxFit.cover,
+                          errorWidget:
+                              (context, url, error) => SizedBox(
+                                width: 70,
+                                height: 70,
+                                child: Image.asset(
+                                  'assets/images/fashion.png',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                        )
+                        : SizedBox(  width: 70,
+                                height: 70,
+                              
+                          child: Image.asset(
+                            'assets/images/fashion.png',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+              ),
             ),
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: height * 0.002),
+          padding: EdgeInsets.only(top: height * 0.004),
           child: Text(
             category.parent,
             style: const TextStyle(
               color: Color(0xff55585B),
               fontWeight: FontWeight.w400,
-              fontSize: 12,
+              fontSize: 14
             ),
           ),
         ),
@@ -556,6 +580,9 @@ class _FavoriteButton extends StatelessWidget {
     );
 
     return InkWell(
+         borderRadius: BorderRadius.circular(50),
+      splashColor: Color(0xff821F40).withOpacity(0.2),
+      highlightColor: Color(0xff821F40).withOpacity(0.1),
       onTap: () => context.read<WishlistCubit>().toggleProduct(product),
       child: Container(
         padding: const EdgeInsets.all(6),
@@ -569,13 +596,21 @@ class _FavoriteButton extends StatelessWidget {
               offset: const Offset(0, 2),
             ),
           ],
+          
         ),
+ child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          transitionBuilder: (child, animation) {
+            return ScaleTransition(scale: animation, child: child);
+          },
+        
         child: Icon(
           isFavorite ? Icons.favorite : Icons.favorite_border,
           color: const Color(0xff821F40),
+          key: ValueKey<bool>(isFavorite),
           size: 22,
         ),
       ),
-    );
+     ) );
   }
 }

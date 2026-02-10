@@ -69,23 +69,23 @@ class ProfilePage extends StatelessWidget {
               },
             ),
 
-            Padding(
-              padding: EdgeInsets.only(top: height * 0.016),
-              child: FavoriteHeaderCard(
-                title: 'طلباتي',
-                icons: Icons.shopping_bag_outlined,
-                onClick: () {
-                  // TODO: Uncomment when OrdersPage is ready
-                  // Navigator.pushNamed(context, '/orders');
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('صفحة الطلبات قيد التطوير'),
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
-                },
-              ),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.only(top: height * 0.016),
+            //   child: FavoriteHeaderCard(
+            //     title: 'طلباتي',
+            //     icons: Icons.shopping_bag_outlined,
+            //     onClick: () {
+            //       // TODO: Uncomment when OrdersPage is ready
+            //       // Navigator.pushNamed(context, '/orders');
+            //       ScaffoldMessenger.of(context).showSnackBar(
+            //         const SnackBar(
+            //           content: Text('صفحة الطلبات قيد التطوير'),
+            //           duration: Duration(seconds: 2),
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
 
             //  Padding(
             //    padding:  EdgeInsets.only(top: height*0.016),

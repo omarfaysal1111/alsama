@@ -166,10 +166,10 @@ class _CategoriesPageState extends State<CategoriesPage> {
                           },
                           child: Container(
                             margin: EdgeInsets.only(bottom: height * 0.016),
-                            height: height * 100 / 844,
+                            height: height * 80 / 844,
                             decoration: BoxDecoration(
-                              color: Color(0xffF3F5F6),
-                              borderRadius: BorderRadius.circular(0),
+                              color: Color(0xfff8f8f8),
+                              borderRadius: BorderRadius.circular(8),
                             ),
                             child: Row(
                               children: [
@@ -194,13 +194,15 @@ class _CategoriesPageState extends State<CategoriesPage> {
                                   child: CachedNetworkImage(
                                     imageUrl: category.img,
                                     width: 80,
+                                    
                                     height: double.infinity,
                                     fit: BoxFit.contain,
                                     placeholder:
                                         (context, url) => Container(
                                           width: 80,
+                                          
                                           height: double.infinity,
-                                          color: Colors.grey[300],
+                                          color: Color(0xffF8F8F8),
                                           child: const Center(
                                             child: CircularProgressIndicator(),
                                           ),

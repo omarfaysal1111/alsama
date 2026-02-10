@@ -226,14 +226,21 @@ class CartItemCard extends StatelessWidget {
             left: 20,
             top: 22,
             child: Container(
-              decoration: BoxDecoration(
-                color: Color(0xfC30909).withOpacity(0.3),
-                shape: BoxShape.circle,
-              ),
+            decoration: BoxDecoration(
+    color: Colors.red.withOpacity(0.2), 
+    shape: BoxShape.circle,
+    boxShadow: [
+      BoxShadow(
+        color: Colors.black.withOpacity(0.1),
+        blurRadius: 4,
+        offset: Offset(0, 2), 
+      ),
+    ],
+  ),
               child: IconButton(
                 onPressed: onDelete,
                 icon: const Icon(
-                  Icons.delete_outline_outlined,
+                  Icons.delete_outline,
                   color: Color(0xffC30909),
                   size: 24,
                 ),

@@ -113,12 +113,13 @@ class _RegisterPageState extends State<RegisterPage> {
             children: [
               Text(
                 'انشاء حساب جديد',
-                style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
               ),
 
               Padding(
                 padding: EdgeInsets.only(top: height * 0.08),
                 child: TextFieldRegister(
+                  
                   keyboardType: keyboardT.email,
 
                   emailController: emailController,
@@ -172,7 +173,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   emailController: loc1Controller,
                   hinttext: 'العنوان (المدينة)',
-                  icon: Icons.location_on_outlined,
+                  icon: Icons.location_city_outlined,
                   onChanged: (value) {},
                 ),
               ),
@@ -293,7 +294,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
 
               Padding(
-                padding: const EdgeInsets.only(top: 60.0),
+                padding: const EdgeInsets.only(top: 50.0),
                 child: DefaultButton(
                   onTap: isLoading ? () {} : _handleRegister,
                   text: isLoading ? 'جاري التسجيل...' : 'تسجيل',
@@ -319,7 +320,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ],
               ),
-            ],
+            SizedBox(height: 20,)],
+            
           ),
         ),
             );

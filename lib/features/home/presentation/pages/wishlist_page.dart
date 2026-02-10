@@ -115,18 +115,113 @@ class _WishlistItemCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => _openProductDetail(context, item),
       child: Container(
-        padding: EdgeInsets.all(width * (12 / 390)),
+
+       // padding: EdgeInsets.all(width * (16 / 390)),
         decoration: BoxDecoration(
           color: const Color(0xffF8F8F8),
-          border: Border.all(color: const Color(0xffE0E2E3)),
+          border: Border.all(color: const Color(0xffE0E2E3),width: 1),
+          borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0,left: 16),
               child: Container(
-                width: width * (80 / 390),
-                height: height * (100 / 844),
-                color: const Color(0xffF3F5F6),
+               decoration: BoxDecoration(
+    color: Colors.red.withOpacity(0.2), 
+    shape: BoxShape.circle,
+    boxShadow: [
+      BoxShadow(
+        color: Colors.black.withOpacity(0.1), 
+        blurRadius: 4,
+        offset: Offset(0, 2),
+      ),
+    ],
+  ),
+                child: IconButton(
+                  onPressed:
+                      () => context.read<WishlistCubit>().removeById(item.id),
+                  icon: const Icon(
+                    Icons.delete_outline,
+                    color: Color(0xffC30909),
+                    size: 20,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(width: 12,),
+            Expanded(
+              child: Padding(
+              padding: const EdgeInsets.only(top: 12.0,),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      item.title,
+                      textAlign: TextAlign.right,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(height: height * (4 / 844)),
+                    Text(
+                      item.description,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.right,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Color(0xff55585B),
+                      ),
+                    ),
+                    SizedBox(height: height * (12 / 844)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Directionality(
+                          textDirection: TextDirection.rtl,
+                
+                          child: Text(
+                            '${item.finalPrice.toStringAsFixed(0)} ج.م ',
+                            style: const TextStyle(
+                              color: Color(0xff821F40),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                        if (item.hasDiscount) ...[
+                          const SizedBox(width: 8),
+                          Text(
+                            '${item.price.toStringAsFixed(0)} ج.م',
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                              decoration: TextDecoration.lineThrough,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(width: width * (12 / 390)),
+
+            ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+
+              child: Container(
+                width: width * (100 / 390),
+                height: height * (140 / 844),
+                decoration: BoxDecoration(
+                                  color: const Color(0xffF3F5F6),
+borderRadius: BorderRadius.circular(8)
+                ),
                 child: CachedNetworkImage(
                   imageUrl: item.img,
                   fit: BoxFit.cover,
@@ -140,64 +235,6 @@ class _WishlistItemCard extends StatelessWidget {
                       ),
                 ),
               ),
-            ),
-            SizedBox(width: width * (12 / 390)),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    item.title,
-                    textAlign: TextAlign.right,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
-                    ),
-                  ),
-                  SizedBox(height: height * (4 / 844)),
-                  Text(
-                    item.description,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.right,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Color(0xff55585B),
-                    ),
-                  ),
-                  SizedBox(height: height * (8 / 844)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        '${item.finalPrice.toStringAsFixed(0)} ج.م',
-                        style: const TextStyle(
-                          color: Color(0xff821F40),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      if (item.hasDiscount) ...[
-                        const SizedBox(width: 8),
-                        Text(
-                          '${item.price.toStringAsFixed(0)} ج.م',
-                          style: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 12,
-                            decoration: TextDecoration.lineThrough,
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            IconButton(
-              onPressed:
-                  () => context.read<WishlistCubit>().removeById(item.id),
-              icon: const Icon(Icons.delete_outline, color: Color(0xff821F40)),
             ),
           ],
         ),

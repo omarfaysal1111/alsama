@@ -319,7 +319,7 @@ class _ProductGridCard extends StatelessWidget {
       child: Card(
         elevation: 0,
         color: const Color(0xffF8F8F8),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -329,6 +329,7 @@ class _ProductGridCard extends StatelessWidget {
                 width: double.infinity,
                 color: const Color(0xffF3F5F6),
                 child: ClipRRect(
+                  borderRadius: BorderRadiusGeometry.circular(8),
                   child: Image.network(
                     product.img,
                     fit: BoxFit.cover,

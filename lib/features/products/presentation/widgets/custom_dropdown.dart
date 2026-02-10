@@ -29,6 +29,7 @@ class CustomDropdown extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor ?? const Color(0xffF3F5F6),
         border: Border.all(color: Color(0xffE9EAEB)),
+        borderRadius: BorderRadius.circular(8)
       ),
       child: Directionality(
         textDirection: TextDirection.rtl,
