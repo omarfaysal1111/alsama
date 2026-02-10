@@ -208,6 +208,7 @@ class _HomePageState extends State<HomePage> {
                         }
                       },
                     ),
+                    SizedBox(height: 16),
 
                     BannerSlider(),
                     SizedBox(height: 20),
@@ -264,6 +265,23 @@ class _HomePageState extends State<HomePage> {
                             child: Text('لا توجد أقسام متاحة الآن'),
                           );
                         },
+                      ),
+                    ),
+
+                    SizedBox(height: height * 0.02),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: height * 0.02,
+                        bottom: height * 0.02,
+                      ),
+                      child: Text(
+                        textAlign: TextAlign.right,
+                        'منتجاتنا',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
 
@@ -402,7 +420,8 @@ class ProductCard extends StatelessWidget {
                           style: TextStyle(
                             color: Color(0xff821F40),
                             fontWeight: FontWeight.w500,
-                            fontSize: 16,
+                            fontSize: 14,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         if (product.hasDiscount) ...[
