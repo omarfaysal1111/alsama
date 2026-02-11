@@ -32,10 +32,12 @@ class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
 
       if (response.statusCode == 200) {
         final responseData = response.data;
-        
+
         // Handle API response structure
-        if (responseData is Map<String, dynamic> && responseData.containsKey('records')) {
-          final List<dynamic> records = responseData['records'] as List<dynamic>;
+        if (responseData is Map<String, dynamic> &&
+            responseData.containsKey('records')) {
+          final List<dynamic> records =
+              responseData['records'] as List<dynamic>;
           return records.map((json) => OrderModel.fromJson(json)).toList();
         } else if (responseData is List) {
           return responseData.map((json) => OrderModel.fromJson(json)).toList();
@@ -145,22 +147,26 @@ class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
 
         if (responseData is Map<String, dynamic>) {
           // addorder docs: successful response is { "message": 0 }
-          if (responseData['message'] == 0) {
+          final messageCode =
+              int.tryParse(responseData['message']?.toString() ?? '-1') ?? -1;
+
+          if (messageCode == 0) {
             final rows = (orderData['rows'] as List<dynamic>?) ?? <dynamic>[];
-            final items = rows.map((row) {
-              final rowMap = row as Map<String, dynamic>;
-              return {
-                'id': '',
-                'productId': rowMap['modelid']?.toString() ?? '',
-                'productTitle': '',
-                'productImage': '',
-                'price': rowMap['price'] ?? 0,
-                'discount': 0,
-                'quantity': rowMap['qty'] ?? 1,
-                'size': rowMap['sizeid']?.toString(),
-                'color': rowMap['colorid']?.toString(),
-              };
-            }).toList();
+            final items =
+                rows.map((row) {
+                  final rowMap = row as Map<String, dynamic>;
+                  return {
+                    'id': '',
+                    'productId': rowMap['modelid']?.toString() ?? '',
+                    'productTitle': '',
+                    'productImage': '',
+                    'price': rowMap['price'] ?? 0,
+                    'discount': 0,
+                    'quantity': rowMap['qty'] ?? 1,
+                    'size': rowMap['sizeid']?.toString(),
+                    'color': rowMap['colorid']?.toString(),
+                  };
+                }).toList();
 
             return OrderModel.fromJson({
               'id': '',
@@ -185,14 +191,11 @@ class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
               },
               'createdAt': DateTime.now().toIso8601String(),
             });
-          }
-
-          if (responseData.containsKey('order')) {
-            return OrderModel.fromJson(responseData['order']);
-          } else if (responseData.containsKey('data')) {
-            return OrderModel.fromJson(responseData['data']);
           } else {
-            return OrderModel.fromJson(responseData);
+            throw ServerException(
+              message: 'برجاء مراجعة البيانات',
+              code: response.statusCode,
+            );
           }
         } else {
           throw ServerException(

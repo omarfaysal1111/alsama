@@ -89,23 +89,12 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, void>> logout() async {
     try {
-      if (await _networkInfo.isConnected) {
-        await _remoteDataSource.logout();
-      }
-
-      // Clear local cache
+      // Local-only logout: clear cached auth data.
       await _localDataSource.clearToken();
       await _localDataSource.clearUser();
 
       return const Right(null);
-    } on ServerException catch (e) {
-      // Even if remote logout fails, clear local cache
-      await _localDataSource.clearToken();
-      await _localDataSource.clearUser();
-      return Left(ServerFailure(message: e.message));
     } catch (e) {
-      await _localDataSource.clearToken();
-      await _localDataSource.clearUser();
       return Left(ServerFailure(message: 'Logout failed: ${e.toString()}'));
     }
   }

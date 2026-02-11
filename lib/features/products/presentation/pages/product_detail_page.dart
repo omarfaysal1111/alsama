@@ -3,10 +3,20 @@ import 'package:alsama/features/products/presentation/widgets/custom_dropdown.da
 import 'package:alsama/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:alsama/features/cart/presentation/bloc/cart_event.dart';
 import 'package:alsama/features/cart/presentation/bloc/cart_state.dart';
+import 'package:alsama/core/constants/api_endpoints.dart';
+import 'package:alsama/core/constants/app_constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/product.dart';
+
+class _OptionItem {
+  final String id;
+  final String name;
+
+  const _OptionItem({required this.id, required this.name});
+}
 
 class ProductDetailPage extends StatefulWidget {
   final Product product;
@@ -18,18 +28,160 @@ class ProductDetailPage extends StatefulWidget {
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
+  final Dio _dio = Dio();
   String? selectedSize;
   String? selectedColor;
   int quantity = 1;
+  List<_OptionItem> _colors = [];
+  List<_OptionItem> _sizes = [];
+  bool _loadingColors = false;
+  bool _loadingSizes = false;
   
-  final List<String> sizes = ['S', 'M', 'L', 'XL', 'XXL'];
-  final List<String> colors = ['أحمر', 'أزرق', 'أسود', 'أبيض'];
+  bool get _hasSelectedRequiredOptions =>
+      selectedColor != null && selectedSize != null;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchColors();
+  }
+
+  Future<void> _fetchColors() async {
+    setState(() {
+      _loadingColors = true;
+    });
+
+    try {
+      final response = await _dio.get(
+        '${ApiEndpoints.getColorsByModel}/${widget.product.id}',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${AppConstants.bearerToken}',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      final data = response.data;
+      final List<dynamic> list =
+          data is List
+              ? data
+              : (data is Map<String, dynamic> && data['data'] is List
+                  ? data['data'] as List<dynamic>
+                  : (data is Map<String, dynamic> && data['records'] is List
+                      ? data['records'] as List<dynamic>
+                      : <dynamic>[]));
+
+      final colors =
+          list
+              .whereType<Map>()
+              .map(
+                (e) => _OptionItem(
+                  id: e['id']?.toString() ?? '',
+                  name: e['name']?.toString() ?? '',
+                ),
+              )
+              .where((e) => e.id.isNotEmpty && e.name.isNotEmpty)
+              .toList();
+
+      setState(() {
+        _colors = colors;
+      });
+    } catch (_) {
+      setState(() {
+        _colors = [];
+      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _loadingColors = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _fetchSizesForColor(String colorId) async {
+    setState(() {
+      _loadingSizes = true;
+      _sizes = [];
+      selectedSize = null;
+    });
+
+    try {
+      final response = await _dio.post(
+        ApiEndpoints.getSizes,
+        data: {'modelid': widget.product.id.toString(), 'colorid': colorId},
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${AppConstants.bearerToken}',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      final data = response.data;
+      final List<dynamic> list =
+          data is List
+              ? data
+              : (data is Map<String, dynamic> && data['data'] is List
+                  ? data['data'] as List<dynamic>
+                  : (data is Map<String, dynamic> && data['records'] is List
+                      ? data['records'] as List<dynamic>
+                      : <dynamic>[]));
+
+      final sizes =
+          list
+              .whereType<Map>()
+              .map(
+                (e) => _OptionItem(
+                  id: e['id']?.toString() ?? '',
+                  name: e['name']?.toString() ?? '',
+                ),
+              )
+              .where((e) => e.id.isNotEmpty && e.name.isNotEmpty)
+              .toList();
+
+      setState(() {
+        _sizes = sizes;
+      });
+    } catch (_) {
+      setState(() {
+        _sizes = [];
+      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _loadingSizes = false;
+        });
+      }
+    }
+  }
+
+  String _resolveColorId() {
+    final selected = _colors.where((e) => e.name == selectedColor);
+    return selected.isNotEmpty ? selected.first.id : '';
+  }
+
+  String _resolveSizeId() {
+    final selected = _sizes.where((e) => e.name == selectedSize);
+    return selected.isNotEmpty ? selected.first.id : '';
+  }
 
   void _addToCart() {
+    if (!_hasSelectedRequiredOptions) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('من فضلك اختر اللون والمقاس أولاً'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
     // Create product with selected color and size IDs
     final productWithOptions = widget.product.copyWith(
-      colorId: selectedColor != null ? _getColorId(selectedColor!) : '1',
-      sizeId: selectedSize != null ? _getSizeId(selectedSize!) : '1',
+      colorId: _resolveColorId(),
+      sizeId: _resolveSizeId(),
     );
     
     context.read<CartBloc>().add(
@@ -53,29 +205,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         ),
       ),
     );
-  }
-  
-  // Helper method to convert color name to ID
-  String _getColorId(String colorName) {
-    final colorMap = {
-      'أحمر': '1',
-      'أزرق': '2',
-      'أسود': '3',
-      'أبيض': '4',
-    };
-    return colorMap[colorName] ?? '1';
-  }
-  
-  // Helper method to convert size name to ID
-  String _getSizeId(String sizeName) {
-    final sizeMap = {
-      'S': '1',
-      'M': '2',
-      'L': '3',
-      'XL': '4',
-      'XXL': '5',
-    };
-    return sizeMap[sizeName] ?? '3';  // Default to L
   }
 
   void _incrementQuantity() {
@@ -318,14 +447,23 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               child: CustomDropdown(
                 width: double.infinity,
                 height: 48,
-                items: colors,
+                items: _colors.map((e) => e.name).toList(),
                 selectedValue: selectedColor,
-                
-                hintText: 'اختر اللون',
+                hintText:
+                    _loadingColors
+                        ? 'جاري تحميل الألوان...'
+                        : (_colors.isEmpty ? 'لا توجد ألوان متاحة' : 'اختر اللون'),
                 onChanged: (value) {
+                  final color = _colors.where((e) => e.name == value);
+                  final colorId = color.isNotEmpty ? color.first.id : '';
                   setState(() {
                     selectedColor = value;
+                    selectedSize = null;
+                    _sizes = [];
                   });
+                  if (colorId.isNotEmpty) {
+                    _fetchSizesForColor(colorId);
+                  }
                 },
               ),
             ),
@@ -359,9 +497,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               child: CustomDropdown(
                 width: double.infinity,
                 height: 48,
-                items: sizes,
+                items: _sizes.map((e) => e.name).toList(),
                 selectedValue: selectedSize,
-                hintText: 'اختر المقاس',
+                hintText:
+                    _loadingSizes
+                        ? 'جاري تحميل المقاسات...'
+                        : (_sizes.isEmpty ? 'اختر اللون أولاً' : 'اختر المقاس'),
                 onChanged: (value) {
                   setState(() {
                     selectedSize = value;
@@ -487,7 +628,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               children: [
                 DefaultButton(
                   text: isLoading ? 'جاري الإضافة...' : 'أضف إلى السلة',
-                  onTap: widget.product.isInStock && !isLoading
+                  onTap: widget.product.isInStock &&
+                          !isLoading &&
+                          _hasSelectedRequiredOptions
                       ? _addToCart
                       : () {},
                 ),

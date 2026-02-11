@@ -5,20 +5,31 @@ class AuthResultModel extends AuthResult {
   const AuthResultModel({required super.user, required super.token});
 
   factory AuthResultModel.fromLoginResponse(Map<String, dynamic> json) {
+    Map<String, dynamic> payload = json;
+
+    // Backend may return user object inside `data`
+    if (json['data'] is Map<String, dynamic>) {
+      payload = json['data'] as Map<String, dynamic>;
+    }
+
+    final user = UserModel.fromJson(payload);
+    final sessionKey = (payload['id'] ??
+            payload['custid'] ??
+            payload['customerId'] ??
+            payload['customer_id'] ??
+            payload['email'])
+        ?.toString() ??
+        '';
+
     return AuthResultModel(
-      user: UserModel.fromJson(json),
-      // API login response does not include token; keep app session key from user id
-      token: json['id']?.toString() ?? '',
+      user: user,
+      // No token from backend; use stable local session key
+      token: sessionKey,
     );
   }
 
-  factory AuthResultModel.fromRegisterResponse({
-    required UserModel user,
-  }) {
-    return AuthResultModel(
-      user: user,
-      token: user.id,
-    );
+  factory AuthResultModel.fromRegisterResponse({required UserModel user}) {
+    return AuthResultModel(user: user, token: user.id);
   }
 
   factory AuthResultModel.fromJson(Map<String, dynamic> json) {

@@ -14,14 +14,51 @@ class UserModel extends User {
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
+    String _asString(dynamic v) => v?.toString().trim() ?? '';
+    String _firstNonEmpty(List<dynamic> values) {
+      for (final value in values) {
+        final parsed = _asString(value);
+        if (parsed.isNotEmpty) return parsed;
+      }
+      return '';
+    }
+
+    final id = _firstNonEmpty([
+      json['id'],
+      json['custid'],
+      json['customerId'],
+      json['customer_id'],
+    ]);
+    final email = _firstNonEmpty([json['email'], json['mail']]);
+    final name = _firstNonEmpty([
+      json['name'],
+      json['username'],
+      json['ecommerceusername'],
+      json['ecommercusername'],
+      json['fullName'],
+    ]);
+    final phone = _firstNonEmpty([
+      json['phone'],
+      json['phone1'],
+      json['mobile'],
+      json['mobile1'],
+      json['tel'],
+    ]);
+    final address = _firstNonEmpty([
+      json['address'],
+      json['addressLine1'],
+      json['address_line_1'],
+    ]);
+    final city = _firstNonEmpty([json['city']]);
+
     return UserModel(
-      id: json['id']?.toString() ?? '',
-      email: json['email'] as String? ?? '',
-      name: json['name'] as String? ?? json['username'] as String? ?? '',
-      phone: json['phone'] as String? ?? json['phone1'] as String?,  // Support both phone and phone1
+      id: id,
+      email: email,
+      name: name,
+      phone: phone.isNotEmpty ? phone : null,
       avatar: json['avatar'] as String?,
-      address: json['address'] as String?,
-      city: json['city'] as String?,
+      address: address.isNotEmpty ? address : null,
+      city: city.isNotEmpty ? city : null,
       createdAt:
           json['created_at'] != null
               ? DateTime.parse(json['created_at'] as String)

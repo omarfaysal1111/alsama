@@ -99,12 +99,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (failure) => emit(Unauthenticated()),
       (user) {
-        // We need the token here, but for now we'll just emit authenticated
-        // In a real app, you'd get the token from local storage
         emit(
           Authenticated(
             user: user,
-            token: '', // TODO: Get from local storage
+            token: user.id,
           ),
         );
       },

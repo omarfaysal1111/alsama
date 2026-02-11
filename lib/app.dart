@@ -4,6 +4,7 @@ import 'core/di/injection_container.dart' as di;
 import 'core/routes/app_routes.dart';
 import 'core/routes/route_generator.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
+import 'features/auth/presentation/bloc/auth_event.dart';
 import 'features/products/presentation/bloc/products_bloc.dart';
 import 'features/home/presentation/bloc/home_bloc.dart';
 import 'features/home/presentation/bloc/categories_bloc.dart';
@@ -18,7 +19,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<AuthBloc>(create: (context) => di.sl<AuthBloc>()),
+        BlocProvider<AuthBloc>(
+          create: (context) => di.sl<AuthBloc>()..add(GetCurrentUserRequested()),
+        ),
         BlocProvider<HomeBloc>(create: (context) => HomeBloc()),
         BlocProvider<ProductsBloc>(create: (context) => di.sl<ProductsBloc>()),
         BlocProvider<CategoriesBloc>(
@@ -39,7 +42,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           useMaterial3: true,
         ),
-        initialRoute: AppRoutes.home,
+        initialRoute: AppRoutes.login,
         onGenerateRoute: RouteGenerator.generateRoute,
         debugShowCheckedModeBanner: false,
       ),

@@ -329,7 +329,7 @@ class _ProductGridCard extends StatelessWidget {
                 width: double.infinity,
                 color: const Color(0xffF3F5F6),
                 child: ClipRRect(
-                  borderRadius: BorderRadiusGeometry.circular(8),
+                  //  borderRadius: BorderRadiusGeometry.circular(8),
                   child: Image.network(
                     product.img,
                     fit: BoxFit.cover,

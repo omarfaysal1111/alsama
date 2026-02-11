@@ -38,17 +38,43 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final response = await _dio.post(
         ApiEndpoints.login,
-        data: {
-          'username': email,
-          'password': password,
-        },
+        data: {'username': email, 'password': password},
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${AppConstants.bearerToken}',
+            'Content-Type': 'application/json',
+          },
+        ),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final responseData = response.data;
 
-        if (responseData is Map<String, dynamic>) {
-          return AuthResultModel.fromLoginResponse(responseData);
+        if (responseData is Map) {
+          final payload = Map<String, dynamic>.from(responseData);
+
+          // If backend returns {message, data, extramessage}, respect message first.
+          if (payload.containsKey('message')) {
+            final messageCode =
+                int.tryParse(payload['message']?.toString() ?? '0') ?? 0;
+            if (messageCode != 0) {
+              final extra =
+                  payload['extramessage']?.toString().trim() ?? '';
+              throw ServerException(
+                message:
+                    extra.isNotEmpty
+                        ? extra
+                        : 'اسم المستخدم أو كلمة المرور غير صحيحة',
+              );
+            }
+          }
+
+          final authResult = AuthResultModel.fromLoginResponse(payload);
+          // Login is considered valid only when customer id is parsed successfully.
+          if (authResult.user.id.isEmpty) {
+            throw ServerException(message: 'Invalid login payload');
+          }
+          return authResult;
         }
 
         throw ServerException(message: 'Invalid response format');
@@ -80,11 +106,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       final response = await _dio.post(
         ApiEndpoints.register,
         data: {
-          'name': name,
+          'ecommerceusername': name,
           'phone1': phone ?? '',
           'email': email,
+          'ecommercepw': password,
           'address': address ?? city ?? '',
-          'customertype': '1',
+          'customertype': '0',
         },
         options: Options(
           headers: {

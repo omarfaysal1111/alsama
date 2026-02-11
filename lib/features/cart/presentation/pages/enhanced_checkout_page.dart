@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/routes/app_routes.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
 import '../../../auth/presentation/widgets/default_button.dart';
@@ -62,45 +61,41 @@ class _EnhancedCheckoutPageState extends State<EnhancedCheckoutPage> {
       return;
     }
 
-    // Get user info from AuthBloc
+    // Login is optional for checkout. If user is logged in, attach user id/email.
     final authState = context.read<AuthBloc>().state;
     String custId = '';
     String userName = '';
     String userPhone = '';
     String userEmail = '';
-    
     if (authState is Authenticated) {
-      custId = authState.user.id;
-      userName = authState.user.name;
-      userPhone = authState.user.phone ?? '';
+      final userId = authState.user.id.trim();
+      custId = userId;
+      userName = authState.user.name.trim();
+      userPhone = (authState.user.phone ?? '').trim();
       userEmail = authState.user.email;
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('الرجاء تسجيل الدخول أولاً'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      Navigator.pushReplacementNamed(context, AppRoutes.login);
-      return;
     }
 
     // Create order data according to API documentation
     final orderData = {
       'custid': custId,
-      'name': userName,
-      'phone': userPhone,
+      'name': userName.isNotEmpty ? userName : (_shippingAddress!['fullName'] ?? ''),
+      'phone': userPhone.isNotEmpty ? userPhone : (_shippingAddress!['phone'] ?? ''),
       'address': _shippingAddress!['addressLine1'] ?? '',
-      'email': userEmail,
-      'rows': cartState.cartItems.map((item) {
-        return {
-          'modelid': item.product.id.toString(),
-          'colorid': item.product.colorId?.toString() ?? '1',  // Default to 1 if no color
-          'sizeid': item.product.sizeId?.toString() ?? '1',    // Default to 1 if no size
-          'price': item.product.price,
-          'qty': item.quantity,
-        };
-      }).toList(),
+      'email': userEmail.isNotEmpty ? userEmail : (_shippingAddress!['email'] ?? ''),
+      'rows':
+          cartState.cartItems.map((item) {
+            return {
+              'modelid': item.product.id.toString(),
+              'colorid':
+                  item.product.colorId?.toString() ??
+                  '1', // Default to 1 if no color
+              'sizeid':
+                  item.product.sizeId?.toString() ??
+                  '1', // Default to 1 if no size
+              'price': item.product.price,
+              'qty': item.quantity,
+            };
+          }).toList(),
     };
 
     // Dispatch create order event
@@ -141,17 +136,6 @@ class _EnhancedCheckoutPageState extends State<EnhancedCheckoutPage> {
               if (state is OrderCreated) {
                 // Clear cart
                 context.read<CartBloc>().add(ClearCartRequested());
-                
-                // Show success message
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('تم إنشاء الطلب بنجاح'),
-                    backgroundColor: Colors.green,
-                  ),
-                );
-
-                // Navigate to order details or orders list
-                Navigator.pop(context);
               } else if (state is OrdersError) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
@@ -180,7 +164,8 @@ class _EnhancedCheckoutPageState extends State<EnhancedCheckoutPage> {
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed:
-                          () => context.read<CartBloc>().add(GetCartRequested()),
+                          () =>
+                              context.read<CartBloc>().add(GetCartRequested()),
                       child: const Text('إعادة المحاولة'),
                     ),
                   ],
@@ -189,7 +174,9 @@ class _EnhancedCheckoutPageState extends State<EnhancedCheckoutPage> {
             }
 
             if (cartState is CartEmpty) {
-              return const Center(child: Text('لا توجد عناصر في السلة للمتابعة'));
+              return const Center(
+                child: Text('لا توجد عناصر في السلة للمتابعة'),
+              );
             }
 
             if (cartState is CartLoaded) {
@@ -222,7 +209,9 @@ class _EnhancedCheckoutPageState extends State<EnhancedCheckoutPage> {
                     _SectionCard(
                       title: 'ملخص الطلب',
                       child: Column(
-                        children: List.generate(cartState.cartItems.length, (index) {
+                        children: List.generate(cartState.cartItems.length, (
+                          index,
+                        ) {
                           final item = cartState.cartItems[index];
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8),
@@ -240,8 +229,9 @@ class _EnhancedCheckoutPageState extends State<EnhancedCheckoutPage> {
                                           color: const Color(0xffF3F5F6),
                                         ),
                                     errorWidget:
-                                        (context, url, error) =>
-                                            const Icon(Icons.image_not_supported),
+                                        (context, url, error) => const Icon(
+                                          Icons.image_not_supported,
+                                        ),
                                   ),
                                 ),
                                 const SizedBox(width: 12),
@@ -325,7 +315,7 @@ class _EnhancedCheckoutPageState extends State<EnhancedCheckoutPage> {
           return BlocBuilder<OrdersBloc, OrdersState>(
             builder: (context, ordersState) {
               final isLoading = ordersState is OrdersLoading;
-              
+
               return Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: width * 0.04,
@@ -333,9 +323,10 @@ class _EnhancedCheckoutPageState extends State<EnhancedCheckoutPage> {
                 ),
                 child: DefaultButton(
                   text: isLoading ? 'جاري المعالجة...' : 'إتمام الطلب',
-                  onTap: isLoading || cartState is! CartLoaded
-                      ? () {}
-                      : () => _completeOrder(cartState as CartLoaded),
+                  onTap:
+                      isLoading || cartState is! CartLoaded
+                          ? () {}
+                          : () => _completeOrder(cartState as CartLoaded),
                 ),
               );
             },

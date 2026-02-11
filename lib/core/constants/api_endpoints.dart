@@ -1,9 +1,10 @@
 class ApiEndpoints {
   // Base URL
   static const String baseUrl = 'https://api.alfaysalerp.com/fashion';
+  // static const String baseUrl = 'http://192.168.1.27:7000/fashion';
 
   // Auth endpoints
-  static const String login = '$baseUrl/clientLogin';
+  static const String login = '$baseUrl/clientlogin';
   static const String register = '$baseUrl/register';
   static const String logout = '$baseUrl/auth/logout';
   static const String refreshToken = '$baseUrl/auth/refresh';
@@ -13,6 +14,8 @@ class ApiEndpoints {
   static const String getProductById = '$baseUrl/product';
   static const String searchProducts = '$baseUrl/search';
   static const String getFeaturedProducts = '$baseUrl/featured';
+  static const String getColorsByModel = '$baseUrl/getColors';
+  static const String getSizes = '$baseUrl/getsizes';
 
   // Categories endpoints
   static const String getCategories = '$baseUrl/GetCatrgories';
