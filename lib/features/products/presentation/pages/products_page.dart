@@ -8,6 +8,7 @@ import '../bloc/products_state.dart';
 import '../../domain/entities/product.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../cart/presentation/widgets/cart_icon_button.dart';
+import '../../../wishlist/presentation/cubit/wishlist_cubit.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key, required category, required categoryLabel});
@@ -19,6 +20,24 @@ class ProductsPage extends StatefulWidget {
 class _ProductsPageState extends State<ProductsPage> {
   String? _categoryFilter;
   String? _categoryLabel;
+  String? _searchFilter;
+  String? _sortByFilter;
+  String? _sortOrderFilter;
+  double? _minPriceFilter;
+  double? _maxPriceFilter;
+
+  void _loadProducts() {
+    context.read<ProductsBloc>().add(
+      GetProductsRequested(
+        category: _categoryFilter,
+        search: _searchFilter,
+        sortBy: _sortByFilter,
+        sortOrder: _sortOrderFilter,
+        minPrice: _minPriceFilter,
+        maxPrice: _maxPriceFilter,
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -43,9 +62,7 @@ class _ProductsPageState extends State<ProductsPage> {
         });
 
         // Load products with category filter
-        context.read<ProductsBloc>().add(
-          GetProductsRequested(category: normalizedCategory),
-        );
+        _loadProducts();
       }
     });
   }
@@ -156,11 +173,11 @@ class _ProductsPageState extends State<ProductsPage> {
                       ),
                     ),
                     onSubmitted: (query) {
-                      if (query.isNotEmpty) {
-                        context.read<ProductsBloc>().add(
-                          SearchProductsRequested(query: query),
-                        );
-                      }
+                      setState(() {
+                        final trimmedQuery = query.trim();
+                        _searchFilter = trimmedQuery.isEmpty ? null : trimmedQuery;
+                      });
+                      _loadProducts();
                     },
                   ),
                 ),
@@ -176,7 +193,21 @@ class _ProductsPageState extends State<ProductsPage> {
                       pageBuilder: (context, animation, secondaryAnimation) {
                         return Align(
                           alignment: Alignment.centerRight,
-                          child: FilterWidget(),
+                          child: FilterWidget(
+                            initialMaxPrice: _maxPriceFilter ?? 1500,
+                            initialMinPrice: _minPriceFilter ?? 0,
+                            initialSortBy: _sortByFilter,
+                            initialSortOrder: _sortOrderFilter,
+                            onApply: (result) {
+                              setState(() {
+                                _minPriceFilter = result.minPrice;
+                                _maxPriceFilter = result.maxPrice;
+                                _sortByFilter = result.sortBy;
+                                _sortOrderFilter = result.sortOrder;
+                              });
+                              _loadProducts();
+                            },
+                          ),
                         );
                       },
                       transitionBuilder: (
@@ -243,9 +274,7 @@ class _ProductsPageState extends State<ProductsPage> {
                           const SizedBox(height: 16),
                           ElevatedButton(
                             onPressed: () {
-                              context.read<ProductsBloc>().add(
-                                GetProductsRequested(category: _categoryFilter),
-                              );
+                              _loadProducts();
                             },
                             child: const Text('إعادة المحاولة'),
                           ),
@@ -266,9 +295,7 @@ class _ProductsPageState extends State<ProductsPage> {
                   if (state is ProductsLoaded) {
                     return RefreshIndicator(
                       onRefresh: () async {
-                        context.read<ProductsBloc>().add(
-                          GetProductsRequested(category: _categoryFilter),
-                        );
+                        _loadProducts();
                       },
                       child: GridView.builder(
                         padding: EdgeInsets.only(top: height * 0.01),
@@ -325,22 +352,30 @@ class _ProductGridCard extends StatelessWidget {
           children: [
             Expanded(
               flex: 3,
-              child: Container(
-                width: double.infinity,
-                color: const Color(0xffF3F5F6),
-                child: ClipRRect(
-                  //  borderRadius: BorderRadiusGeometry.circular(8),
-                  child: Image.network(
-                    product.img,
-                    fit: BoxFit.cover,
-                    errorBuilder:
-                        (context, error, stackTrace) => const Icon(
-                          Icons.image_not_supported,
-                          color: Colors.grey,
-                          size: 40,
-                        ),
+              child: Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    color: const Color(0xffF3F5F6),
+                    child: ClipRRect(
+                      child: Image.network(
+                        product.img,
+                        fit: BoxFit.cover,
+                        errorBuilder:
+                            (context, error, stackTrace) => const Icon(
+                              Icons.image_not_supported,
+                              color: Colors.grey,
+                              size: 40,
+                            ),
+                      ),
+                    ),
                   ),
-                ),
+                  Positioned(
+                    top: height * 0.012,
+                    left: width * 0.022,
+                    child: _FavoriteButton(product: product),
+                  ),
+                ],
               ),
             ),
             Expanded(
@@ -390,6 +425,52 @@ class _ProductGridCard extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FavoriteButton extends StatelessWidget {
+  const _FavoriteButton({required this.product});
+
+  final Product product;
+
+  @override
+  Widget build(BuildContext context) {
+    final isFavorite = context.select<WishlistCubit, bool>(
+      (cubit) => cubit.isFavorite(product.id),
+    );
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(50),
+      splashColor: const Color(0xff821F40).withOpacity(0.2),
+      highlightColor: const Color(0xff821F40).withOpacity(0.1),
+      onTap: () => context.read<WishlistCubit>().toggleProduct(product),
+      child: Container(
+        padding: const EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          transitionBuilder: (child, animation) {
+            return ScaleTransition(scale: animation, child: child);
+          },
+          child: Icon(
+            isFavorite ? Icons.favorite : Icons.favorite_border,
+            color: const Color(0xff821F40),
+            key: ValueKey<bool>(isFavorite),
+            size: 22,
+          ),
         ),
       ),
     );

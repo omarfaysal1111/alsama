@@ -1,18 +1,74 @@
 import 'package:alsama/features/auth/presentation/widgets/default_button.dart';
 import 'package:flutter/material.dart';
 
+class ProductFilterResult {
+  final double minPrice;
+  final double maxPrice;
+  final String? sortBy;
+  final String? sortOrder;
+
+  const ProductFilterResult({
+    required this.minPrice,
+    required this.maxPrice,
+    this.sortBy,
+    this.sortOrder,
+  });
+}
+
 class FilterWidget extends StatefulWidget {
-  const FilterWidget({super.key});
+  final double initialMinPrice;
+  final double initialMaxPrice;
+  final String? initialSortBy;
+  final String? initialSortOrder;
+  final double maxSelectablePrice;
+  final ValueChanged<ProductFilterResult> onApply;
+
+  const FilterWidget({
+    super.key,
+    required this.initialMinPrice,
+    required this.initialMaxPrice,
+    required this.onApply,
+    this.initialSortBy,
+    this.initialSortOrder,
+    this.maxSelectablePrice = 1500,
+  });
 
   @override
   State<FilterWidget> createState() => _FilterWidgetState();
 }
 
 class _FilterWidgetState extends State<FilterWidget> {
-  RangeValues priceRange = const RangeValues(150, 600);
-  String? selectedCategory;
+  late RangeValues priceRange;
+  String? _sortBy;
+  String? _sortOrder;
 
-  final List<String> categories = ['إسدال', 'عبايات', 'ادناء'];
+  static const List<_SortOption> _sortOptions = [
+    _SortOption(label: 'الأحدث', sortBy: 'newest', sortOrder: 'desc'),
+    _SortOption(
+      label: 'السعر: الأقل للأعلى',
+      sortBy: 'price',
+      sortOrder: 'asc',
+    ),
+    _SortOption(
+      label: 'السعر: الأعلى للأقل',
+      sortBy: 'price',
+      sortOrder: 'desc',
+    ),
+    _SortOption(label: 'الاسم: أ - ي', sortBy: 'name', sortOrder: 'asc'),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    final safeMin = widget.initialMinPrice.clamp(0, widget.maxSelectablePrice);
+    final safeMax = widget.initialMaxPrice.clamp(0, widget.maxSelectablePrice);
+    final start = safeMin <= safeMax ? safeMin : 0.0;
+    final end = safeMin <= safeMax ? safeMax : widget.maxSelectablePrice;
+
+    priceRange = RangeValues(start.toDouble(), end.toDouble());
+    _sortBy = widget.initialSortBy;
+    _sortOrder = widget.initialSortOrder;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +115,7 @@ class _FilterWidgetState extends State<FilterWidget> {
                 RangeSlider(
                   values: priceRange,
                   min: 0,
-                  max: 1500,
+                  max: widget.maxSelectablePrice,
                   divisions: 30,
 
                   labels: RangeLabels(
@@ -90,7 +146,6 @@ class _FilterWidgetState extends State<FilterWidget> {
                           '${priceRange.end.round()} EGP',
                           textAlign: TextAlign.end,
                           softWrap: true,
-                            
                         ),
                       ),
                     ],
@@ -98,51 +153,45 @@ class _FilterWidgetState extends State<FilterWidget> {
                 ),
 
                 SizedBox(height: height * 0.03),
-
-                // الأقسام
                 const Align(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    'القسم',
+                    'الترتيب',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                   ),
                 ),
                 SizedBox(height: height * 0.015),
-                Column(
-                  children:
-                      categories.map((category) {
-                        bool isSelected = selectedCategory == category;
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selectedCategory = category;
-                              });
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color:
-                                    isSelected
-                                        ? const Color(0xff7D173C)
-                                        : Colors.transparent,
-                                border: Border.all(color: Colors.grey),
-                              ),
-                              child: Text(
-                                category,
-                                style: TextStyle(
-                                  color:
-                                      isSelected ? Colors.white : Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      }).toList(),
+                ..._sortOptions.map((option) {
+                  final isSelected =
+                      _sortBy == option.sortBy &&
+                      _sortOrder == option.sortOrder;
+                  return RadioListTile<bool>(
+                    value: true,
+                    groupValue: isSelected,
+                    onChanged: (_) {
+                      setState(() {
+                        _sortBy = option.sortBy;
+                        _sortOrder = option.sortOrder;
+                      });
+                    },
+                    title: Text(
+                      option.label,
+                      textDirection: TextDirection.rtl,
+                      textAlign: TextAlign.right,
+                    ),
+                    contentPadding: EdgeInsets.zero,
+                    controlAffinity: ListTileControlAffinity.trailing,
+                    activeColor: const Color(0xff821F40),
+                  );
+                }),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _sortBy = null;
+                      _sortOrder = null;
+                    });
+                  },
+                  child: const Text('إلغاء الترتيب'),
                 ),
 
                 SizedBox(height: height * 0.04),
@@ -152,31 +201,31 @@ class _FilterWidgetState extends State<FilterWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextButton(
-
-
-                      
                       onPressed: () => Navigator.pop(context),
-                      child:  Text(
+                      child: Text(
                         'إلغاء',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14
-                        ),
-                        ),
+                        style: TextStyle(color: Colors.black, fontSize: 14),
+                      ),
                     ),
 
                     SizedBox(
-                      width:width*(132/390) ,
-                      height: height*(40/844),
-                      child: DefaultButton(text: 'تأكيد', onTap: (){
-                                                Navigator.pop(context);
-                      
-                      
-                      }),
-                    )
-
-                    
-                    
+                      width: width * (132 / 390),
+                      height: height * (40 / 844),
+                      child: DefaultButton(
+                        text: 'تأكيد',
+                        onTap: () {
+                          widget.onApply(
+                            ProductFilterResult(
+                              minPrice: priceRange.start,
+                              maxPrice: priceRange.end,
+                              sortBy: _sortBy,
+                              sortOrder: _sortOrder,
+                            ),
+                          );
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ],
@@ -186,4 +235,16 @@ class _FilterWidgetState extends State<FilterWidget> {
       ),
     );
   }
+}
+
+class _SortOption {
+  final String label;
+  final String sortBy;
+  final String sortOrder;
+
+  const _SortOption({
+    required this.label,
+    required this.sortBy,
+    required this.sortOrder,
+  });
 }

@@ -18,6 +18,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController fullNameController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController loc1Controller = TextEditingController();
@@ -30,6 +31,7 @@ class _RegisterPageState extends State<RegisterPage> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    fullNameController.dispose();
     usernameController.dispose();
     phoneController.dispose();
     loc1Controller.dispose();
@@ -52,6 +54,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
     if (emailController.text.isEmpty ||
         passwordController.text.isEmpty ||
+        fullNameController.text.isEmpty ||
         usernameController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -67,7 +70,9 @@ class _RegisterPageState extends State<RegisterPage> {
         email: emailController.text,
         password: passwordController.text,
         name: usernameController.text,
+        fullName: fullNameController.text,
         phone: phoneController.text.isNotEmpty ? phoneController.text : null,
+        isMerchant: isChecked.value,
       ),
     );
   }
@@ -125,6 +130,16 @@ class _RegisterPageState extends State<RegisterPage> {
                   emailController: emailController,
                   hinttext: 'البريد الالكتروني',
                   icon: Icons.email_outlined,
+                  onChanged: (value) {},
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 16),
+                child: TextFieldRegister(
+                  keyboardType: keyboardT.email,
+                  emailController: fullNameController,
+                  hinttext: 'الاسم',
+                  icon: Icons.badge_outlined,
                   onChanged: (value) {},
                 ),
               ),

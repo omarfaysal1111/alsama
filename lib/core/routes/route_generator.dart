@@ -31,7 +31,9 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const MainPage());
 
       case AppRoutes.categories:
-        return MaterialPageRoute(builder: (_) => const CategoriesPage());
+        return MaterialPageRoute(
+          builder: (_) => home_categories.CategoriesPage(),
+        );
 
       // --- FIX 1: Pass arguments to ProductsPage ---
       case AppRoutes.products:

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../auth/presentation/bloc/auth_bloc.dart';
+import '../../../auth/presentation/bloc/auth_state.dart';
+import '../../../auth/presentation/pages/login_page.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_event.dart';
 import '../bloc/home_state.dart';
@@ -100,7 +103,7 @@ class _MainPageState extends State<MainPage> {
                     BottomNavigationBarItem(
                       icon: Icon(Icons.person_outline),
                       activeIcon: Icon(Icons.person),
-                      label: 'الحساب',
+                      label: 'حسابي',
                     ),
                   ],
                 ),
@@ -125,7 +128,12 @@ class _MainPageState extends State<MainPage> {
       case 2:
         return const WishlistPage();
       case 3:
-        return const ProfilePage();
+        final authState = context.watch<AuthBloc>().state;
+        if (authState is Authenticated &&
+            authState.user.id.trim().isNotEmpty) {
+          return const ProfilePage();
+        }
+        return const LoginPage();
       // case 4:
       //   return const CartPage();
       default:

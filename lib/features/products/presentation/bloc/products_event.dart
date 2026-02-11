@@ -7,6 +7,8 @@ class GetProductsRequested extends ProductsEvent {
   final String? search;
   final String? sortBy;
   final String? sortOrder;
+  final double? minPrice;
+  final double? maxPrice;
   
   GetProductsRequested({
     this.page = 1,
@@ -15,6 +17,8 @@ class GetProductsRequested extends ProductsEvent {
     this.search,
     this.sortBy,
     this.sortOrder,
+    this.minPrice,
+    this.maxPrice,
   });
 }
 
@@ -55,11 +59,15 @@ class FilterProductsRequested extends ProductsEvent {
   final String? search;
   final String? sortBy;
   final String? sortOrder;
+  final double? minPrice;
+  final double? maxPrice;
   
   FilterProductsRequested({
     this.category,
     this.search,
     this.sortBy,
     this.sortOrder,
+    this.minPrice,
+    this.maxPrice,
   });
 }

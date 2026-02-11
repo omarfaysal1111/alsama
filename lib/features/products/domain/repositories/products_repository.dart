@@ -11,6 +11,8 @@ abstract class ProductsRepository {
     String? search,
     String? sortBy,
     String? sortOrder,
+    double? minPrice,
+    double? maxPrice,
   });
   
   Future<Either<Failure, Product>> getProductById(String id);

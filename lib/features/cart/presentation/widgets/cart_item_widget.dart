@@ -37,54 +37,54 @@ class CartItemCard extends StatelessWidget {
       child: Stack(
         children: [
           Card(
-            
-            shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(8)),
-            elevation: 0,
-            margin: EdgeInsets.symmetric(
-              vertical: height * 8 / 844,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
             ),
+            elevation: 0,
+            margin: EdgeInsets.symmetric(vertical: height * 8 / 844),
             color: const Color(0xffF3F5F6),
             child: IntrinsicHeight(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadiusGeometry.circular(8),
+                    borderRadius: BorderRadius.circular(8),
                     child: Container(
                       width: width * 105 / 390,
-                       height: double.infinity,
-                      decoration: BoxDecoration(
-                        color: const Color(0xffF8F8F8)
-                        ),
-                      child: image.startsWith('http')
-                          ? CachedNetworkImage(
-                              imageUrl: image,
-                              fit: BoxFit.fill,
-                              placeholder: (context, url) => Container(
-                                color: Colors.grey[300],
-                                child: const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              ),
-                              errorWidget: (context, url, error) => Container(
-                                color: Colors.grey[300],
-                                child: const Icon(Icons.error),
-                              ),
-                            )
-                          : Image.asset(image, fit: BoxFit.cover),
+                      height: double.infinity,
+                      decoration: BoxDecoration(color: const Color(0xffF8F8F8)),
+                      child:
+                          image.startsWith('http')
+                              ? CachedNetworkImage(
+                                imageUrl: image,
+                                fit: BoxFit.fill,
+                                placeholder:
+                                    (context, url) => Container(
+                                      color: Colors.grey[300],
+                                      child: const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    ),
+                                errorWidget:
+                                    (context, url, error) => Container(
+                                      color: Colors.grey[300],
+                                      child: const Icon(Icons.error),
+                                    ),
+                              )
+                              : Image.asset(image, fit: BoxFit.cover),
                     ),
                   ),
-              
-                  SizedBox(width: width * (12/390)),
-              
+
+                  SizedBox(width: width * (12 / 390)),
+
                   Flexible(
-                      fit: FlexFit.loose,
-                    
+                    fit: FlexFit.loose,
+
                     child: Padding(
-                      padding:  EdgeInsets.only(top:height*(16/844)),
+                      padding: EdgeInsets.only(top: height * (16 / 844)),
                       child: Column(
-                                                            mainAxisSize: MainAxisSize.min,
-                    
+                        mainAxisSize: MainAxisSize.min,
+
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
@@ -98,7 +98,7 @@ class CartItemCard extends StatelessWidget {
                             maxLines: 1,
                           ),
                           SizedBox(height: height * 0.016),
-                                    
+
                           Text(
                             '$price EGP',
                             style: const TextStyle(
@@ -108,14 +108,14 @@ class CartItemCard extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: height * 0.02),
-                                    
+
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Flexible(
-                                  fit: FlexFit.loose,
-                    
+                                fit: FlexFit.loose,
+
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,25 +139,36 @@ class CartItemCard extends StatelessWidget {
                                           color: Color(0xff55585B),
                                         ),
                                       ),
-                    
                                   ],
                                 ),
                               ),
                               SizedBox(width: 90),
                               Padding(
-                                padding: const EdgeInsets.only(bottom: 12.0,top: 12),
+                                padding: const EdgeInsets.only(
+                                  bottom: 12.0,
+                                  top: 12,
+                                ),
                                 child: Row(
                                   children: [
-
                                     Container(
                                       height: height * 32 / 844,
                                       decoration: BoxDecoration(
-                                        color: Color.fromARGB(255, 248, 248, 248),
-                                        border: Border.all(
-                                          width:1 ,
-                                            color: Color.fromARGB(255, 214, 214, 214),
+                                        color: Color.fromARGB(
+                                          255,
+                                          248,
+                                          248,
+                                          248,
                                         ),
-                                        borderRadius: BorderRadius.circular(8)
+                                        border: Border.all(
+                                          width: 1,
+                                          color: Color.fromARGB(
+                                            255,
+                                            214,
+                                            214,
+                                            214,
+                                          ),
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: Row(
                                         children: [
@@ -178,7 +189,7 @@ class CartItemCard extends StatelessWidget {
                                             padding: EdgeInsets.symmetric(
                                               horizontal: width * 0.016,
                                             ),
-                                           
+
                                             child: Text(
                                               quantity.toString(),
                                               style: const TextStyle(
@@ -212,9 +223,9 @@ class CartItemCard extends StatelessWidget {
                       ),
                     ),
                   ),
-              
+
                   const SizedBox(width: 20),
-              
+
                   // Container(
                   //   decoration: BoxDecoration(
                   //     color: Colors.red.withOpacity(0.2),
@@ -233,24 +244,24 @@ class CartItemCard extends StatelessWidget {
               ),
             ),
           ),
-      
+
           Positioned(
             left: 20,
             top: 22,
             child: Container(
-              width: width*(40/390),
-              height: height*(40/844),
-            decoration: BoxDecoration(
-          color: Colors.red.withOpacity(0.2), 
-          shape: BoxShape.circle,
-          boxShadow: [
-      BoxShadow(
-        color: Colors.black.withOpacity(0.1),
-        blurRadius: 4,
-        offset: Offset(0, 2), 
-      ),
-          ],
-        ),
+              width: width * (40 / 390),
+              height: height * (40 / 844),
+              decoration: BoxDecoration(
+                color: Colors.red.withOpacity(0.2),
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
               child: IconButton(
                 onPressed: onDelete,
                 icon: const Icon(

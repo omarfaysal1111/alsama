@@ -14,13 +14,17 @@ class RegisterRequested extends AuthEvent {
   final String email;
   final String password;
   final String name;
+  final String? fullName;
   final String? phone;
+  final bool isMerchant;
   
   RegisterRequested({
     required this.email,
     required this.password,
     required this.name,
+    this.fullName,
     this.phone,
+    this.isMerchant = false,
   });
 }
 

@@ -147,8 +147,13 @@ class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
 
         if (responseData is Map<String, dynamic>) {
           // addorder docs: successful response is { "message": 0 }
+          final messageCodeRaw =
+              responseData['message'] ??
+              responseData['msg'] ??
+              responseData['status'];
           final messageCode =
-              int.tryParse(responseData['message']?.toString() ?? '-1') ?? -1;
+              int.tryParse(messageCodeRaw?.toString() ?? '-1') ?? -1;
+          final backendMessage = _extractBackendMessage(responseData);
 
           if (messageCode == 0) {
             final rows = (orderData['rows'] as List<dynamic>?) ?? <dynamic>[];
@@ -169,7 +174,10 @@ class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
                 }).toList();
 
             return OrderModel.fromJson({
-              'id': '',
+              'id':
+                  responseData['orderid']?.toString() ??
+                  responseData['id']?.toString() ??
+                  '',
               'userId': orderData['custid']?.toString() ?? '',
               'items': items,
               'subtotal': 0,
@@ -190,10 +198,11 @@ class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
                 'postalCode': '',
               },
               'createdAt': DateTime.now().toIso8601String(),
+              'notes': backendMessage,
             });
           } else {
             throw ServerException(
-              message: 'برجاء مراجعة البيانات',
+              message: backendMessage ?? 'برجاء مراجعة البيانات',
               code: response.statusCode,
             );
           }
@@ -209,6 +218,8 @@ class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
           code: response.statusCode,
         );
       }
+    } on ServerException {
+      rethrow;
     } on DioException catch (e) {
       if (e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.receiveTimeout ||
@@ -234,6 +245,24 @@ class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
         code: 500,
       );
     }
+  }
+
+  String? _extractBackendMessage(Map<String, dynamic> responseData) {
+    final candidates = [
+      responseData['extramessage'],
+      responseData['extraMessage'],
+      responseData['messageText'],
+      responseData['message_text'],
+    ];
+
+    for (final candidate in candidates) {
+      final value = candidate?.toString().trim() ?? '';
+      if (value.isNotEmpty && value != '0') {
+        return value;
+      }
+    }
+
+    return null;
   }
 
   @override

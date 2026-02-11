@@ -54,6 +54,8 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
       search: event.search,
       sortBy: event.sortBy,
       sortOrder: event.sortOrder,
+      minPrice: event.minPrice,
+      maxPrice: event.maxPrice,
     );
     
     print('ProductsBloc: Use case result received');
@@ -71,6 +73,8 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
             currentSearch: event.search,
             currentSortBy: event.sortBy,
             currentSortOrder: event.sortOrder,
+            currentMinPrice: event.minPrice,
+            currentMaxPrice: event.maxPrice,
           ));
         }
       },
@@ -230,6 +234,21 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
     RefreshProductsRequested event,
     Emitter<ProductsState> emit,
   ) async {
+    final currentState = state;
+    if (currentState is ProductsLoaded) {
+      add(
+        GetProductsRequested(
+          category: currentState.currentCategory,
+          search: currentState.currentSearch,
+          sortBy: currentState.currentSortBy,
+          sortOrder: currentState.currentSortOrder,
+          minPrice: currentState.currentMinPrice,
+          maxPrice: currentState.currentMaxPrice,
+        ),
+      );
+      return;
+    }
+
     add(GetProductsRequested());
   }
   
@@ -245,6 +264,8 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
         search: currentState.currentSearch,
         sortBy: currentState.currentSortBy,
         sortOrder: currentState.currentSortOrder,
+        minPrice: currentState.currentMinPrice,
+        maxPrice: currentState.currentMaxPrice,
       ));
     }
   }
@@ -258,6 +279,8 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
       search: event.search,
       sortBy: event.sortBy,
       sortOrder: event.sortOrder,
+      minPrice: event.minPrice,
+      maxPrice: event.maxPrice,
     ));
   }
 }

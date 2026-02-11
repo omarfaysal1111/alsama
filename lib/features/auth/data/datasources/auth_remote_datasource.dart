@@ -15,9 +15,11 @@ abstract class AuthRemoteDataSource {
     required String email,
     required String password,
     required String name,
+    String? fullName,
     String? phone,
     String? address,
     String? city,
+    bool isMerchant = false,
   });
 
   Future<void> logout();
@@ -98,20 +100,23 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String email,
     required String password,
     required String name,
+    String? fullName,
     String? phone,
     String? address,
     String? city,
+    bool isMerchant = false,
   }) async {
     try {
       final response = await _dio.post(
         ApiEndpoints.register,
         data: {
+          'name': fullName ?? name,
           'ecommerceusername': name,
           'phone1': phone ?? '',
           'email': email,
           'ecommercepw': password,
           'address': address ?? city ?? '',
-          'customertype': '0',
+          'customertype': isMerchant ? '1' : '0',
         },
         options: Options(
           headers: {
@@ -129,7 +134,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           final user = UserModel(
             id: DateTime.now().millisecondsSinceEpoch.toString(),
             email: email,
-            name: name,
+            name: fullName ?? name,
             phone: phone,
             address: address ?? city,
           );

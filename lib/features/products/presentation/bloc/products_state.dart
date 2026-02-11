@@ -15,6 +15,8 @@ class ProductsLoaded extends ProductsState {
   final String? currentSearch;
   final String? currentSortBy;
   final String? currentSortOrder;
+  final double? currentMinPrice;
+  final double? currentMaxPrice;
   
   ProductsLoaded({
     required this.products,
@@ -24,6 +26,8 @@ class ProductsLoaded extends ProductsState {
     this.currentSearch,
     this.currentSortBy,
     this.currentSortOrder,
+    this.currentMinPrice,
+    this.currentMaxPrice,
   });
   
   ProductsLoaded copyWith({
@@ -34,6 +38,8 @@ class ProductsLoaded extends ProductsState {
     String? currentSearch,
     String? currentSortBy,
     String? currentSortOrder,
+    double? currentMinPrice,
+    double? currentMaxPrice,
   }) {
     return ProductsLoaded(
       products: products ?? this.products,
@@ -43,6 +49,8 @@ class ProductsLoaded extends ProductsState {
       currentSearch: currentSearch ?? this.currentSearch,
       currentSortBy: currentSortBy ?? this.currentSortBy,
       currentSortOrder: currentSortOrder ?? this.currentSortOrder,
+      currentMinPrice: currentMinPrice ?? this.currentMinPrice,
+      currentMaxPrice: currentMaxPrice ?? this.currentMaxPrice,
     );
   }
 }

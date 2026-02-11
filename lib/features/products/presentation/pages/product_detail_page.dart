@@ -340,8 +340,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ],
                   ),
                   SizedBox(height: height * (16 / 844)),
-                  // const Divider(color: Color(0xffF8F8F8), thickness: 1),
 
+                  // const Divider(color: Color(0xffF8F8F8), thickness: 1),
                   SizedBox(height: height * (12 / 844)),
 
                   // Product images gallery
@@ -391,9 +391,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                     ),
                                   ),
                                   child: ClipRRect(
-                                    borderRadius: BorderRadiusGeometry.circular(
-                                      8,
-                                    ),
+                                    borderRadius: BorderRadius.circular(8),
                                     child: Container(
                                       width: width * (60 / 390),
                                       decoration: BoxDecoration(
@@ -417,8 +415,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ),
                       ),
                     ),
-                //  const Divider(color: Color(0xffF8F8F8), thickness: 1),
 
+                  //  const Divider(color: Color(0xffF8F8F8), thickness: 1),
                   SizedBox(height: height * (16 / 844)),
                 ],
               ),
@@ -539,7 +537,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             //   padding: EdgeInsets.symmetric(horizontal: width * (16 / 390)),
             //   child: const Divider(color: Color(0xffF8F8F8), thickness: 1),
             // ),
-
             SizedBox(height: height * (16 / 844)),
 
             Padding(
@@ -582,7 +579,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             //   padding: EdgeInsets.symmetric(horizontal: width * (16 / 390)),
             //   child: const Divider(color: Color(0xffF8F8F8), thickness: 1),
             // ),
-
             SizedBox(height: height * (16 / 844)),
 
             Padding(
@@ -680,7 +676,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             //   padding: EdgeInsets.symmetric(horizontal: width * (16 / 390)),
             //   child: const Divider(color: Color(0xffF8F8F8), thickness: 1),
             // ),
-
             SizedBox(height: height * (16 / 844)),
           ],
         ),
@@ -691,19 +686,21 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
           return Container(
             decoration: BoxDecoration(
-
               borderRadius: BorderRadius.circular(16),
-        color: Colors.white, 
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1), 
-            blurRadius: 10,
-            offset: Offset(0, -3),
-          ),
-        ],
-      ),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 10,
+                  offset: Offset(0, -3),
+                ),
+              ],
+            ),
             child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: width * (12 / 390), vertical: height * (12 / 844)),
+              padding: EdgeInsets.symmetric(
+                horizontal: width * (12 / 390),
+                vertical: height * (12 / 844),
+              ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [

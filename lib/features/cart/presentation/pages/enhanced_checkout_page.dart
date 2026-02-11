@@ -14,6 +14,7 @@ import '../bloc/cart_event.dart';
 import '../bloc/cart_state.dart';
 import '../widgets/address_form_widget.dart';
 import '../widgets/payment_method_selector.dart';
+import '../../../../core/routes/app_routes.dart';
 
 class EnhancedCheckoutPage extends StatefulWidget {
   const EnhancedCheckoutPage({super.key});
@@ -134,8 +135,25 @@ class _EnhancedCheckoutPageState extends State<EnhancedCheckoutPage> {
           BlocListener<OrdersBloc, OrdersState>(
             listener: (context, state) {
               if (state is OrderCreated) {
+                final backendSuccessMessage = state.order.notes?.trim();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      backendSuccessMessage != null &&
+                              backendSuccessMessage.isNotEmpty
+                          ? backendSuccessMessage
+                          : 'تم استلام طلبك بنجاح وسيتم التواصل معك قريبًا',
+                    ),
+                    backgroundColor: Colors.green,
+                  ),
+                );
                 // Clear cart
                 context.read<CartBloc>().add(ClearCartRequested());
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  AppRoutes.home,
+                  (route) => false,
+                );
               } else if (state is OrdersError) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(

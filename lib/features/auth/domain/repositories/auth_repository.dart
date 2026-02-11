@@ -13,9 +13,11 @@ abstract class AuthRepository {
     required String email,
     required String password,
     required String name,
+    String? fullName,
     String? phone,
     String? address,
     String? city,
+    bool isMerchant = false,
   });
 
   Future<Either<Failure, void>> logout();

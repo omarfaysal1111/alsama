@@ -12,17 +12,21 @@ class RegisterUseCase {
     required String email,
     required String password,
     required String name,
+    String? fullName,
     String? phone,
     String? address,
     String? city,
+    bool isMerchant = false,
   }) async {
     return await _repository.register(
       email: email,
       password: password,
       name: name,
+      fullName: fullName,
       phone: phone,
       address: address,
       city: city,
+      isMerchant: isMerchant,
     );
   }
 }

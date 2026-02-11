@@ -15,6 +15,8 @@ class GetProductsUseCase {
     String? search,
     String? sortBy,
     String? sortOrder,
+    double? minPrice,
+    double? maxPrice,
   }) async {
     if (page < 1) {
       return const Left(
@@ -35,6 +37,8 @@ class GetProductsUseCase {
       search: search,
       sortBy: sortBy,
       sortOrder: sortOrder,
+      minPrice: minPrice,
+      maxPrice: maxPrice,
     );
   }
 }

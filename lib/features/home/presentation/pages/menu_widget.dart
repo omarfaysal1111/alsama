@@ -1,10 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/routes/app_routes.dart';
+import '../../../auth/presentation/bloc/auth_bloc.dart';
+import '../../../auth/presentation/bloc/auth_state.dart';
+import '../../../auth/presentation/widgets/logout_dialog.dart';
 
 class MenuWidget extends StatelessWidget {
   const MenuWidget({super.key});
 
+  void _closeMenu(BuildContext context) {
+    Navigator.of(context, rootNavigator: true).pop();
+  }
+
+  void _openRoute(BuildContext context, String routeName) {
+    _closeMenu(context);
+    Navigator.pushNamed(context, routeName);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final authState = context.watch<AuthBloc>().state;
+    final isLoggedIn =
+        authState is Authenticated && authState.user.id.trim().isNotEmpty;
+    final userName =
+        isLoggedIn && authState.user.name.trim().isNotEmpty
+            ? authState.user.name.trim()
+            : 'زائر';
+    final userEmail =
+        isLoggedIn && authState.user.email.trim().isNotEmpty
+            ? authState.user.email.trim()
+            : 'guest@example.com';
+
     return Align(
       alignment: Alignment.topRight,
       child: Material(
@@ -18,7 +44,7 @@ class MenuWidget extends StatelessWidget {
               SizedBox(height: 76),
 
               Text(
-                'اسم المستخدم',
+                userName,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -27,7 +53,7 @@ class MenuWidget extends StatelessWidget {
               ),
               SizedBox(height: 12),
               Text(
-                'user@gmial.com',
+                userEmail,
                 style: const TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 12, // 🔹 حجم الخط 12px
@@ -38,14 +64,22 @@ class MenuWidget extends StatelessWidget {
               SizedBox(height: 80),
 
               GestureDetector(
-                onTap: () {},
+                onTap:
+                    () => _openRoute(
+                      context,
+                      isLoggedIn ? AppRoutes.profile : AppRoutes.login,
+                    ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
                       'الملف الشخصي',
                       textAlign: TextAlign.right,
-                      style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500, color: Color(0xff1C1C1C)),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xff1C1C1C),
+                      ),
                     ),
                     SizedBox(width: 16),
                     Icon(Icons.person_2_outlined, color: Color(0xff1C1C1C)),
@@ -59,17 +93,19 @@ class MenuWidget extends StatelessWidget {
               SizedBox(height: 12),
 
               GestureDetector(
-                onTap: () {},
+                onTap: () => _openRoute(context, AppRoutes.wishlist),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
                       ' المفضلة',
-                      
+
                       textAlign: TextAlign.right,
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
-                        fontSize: 18, color: Color(0xff1C1C1C)),
+                        fontSize: 18,
+                        color: Color(0xff1C1C1C),
+                      ),
                     ),
                     SizedBox(width: 16),
                     Icon(
@@ -86,7 +122,7 @@ class MenuWidget extends StatelessWidget {
               SizedBox(height: 12),
 
               GestureDetector(
-                onTap: () {},
+                onTap: () => _openRoute(context, AppRoutes.cart),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -94,9 +130,11 @@ class MenuWidget extends StatelessWidget {
                       ' السلة',
                       textAlign: TextAlign.right,
                       style: TextStyle(
-                                                fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w500,
 
-                        fontSize: 18, color: Color(0xff1C1C1C)),
+                        fontSize: 18,
+                        color: Color(0xff1C1C1C),
+                      ),
                     ),
                     SizedBox(width: 16),
 
@@ -114,7 +152,7 @@ class MenuWidget extends StatelessWidget {
 
               SizedBox(height: 12),
               GestureDetector(
-                onTap: () {},
+                onTap: () => _openRoute(context, AppRoutes.categories),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -122,9 +160,11 @@ class MenuWidget extends StatelessWidget {
                       'الاقسام',
                       textAlign: TextAlign.right,
                       style: TextStyle(
-                                                fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w500,
 
-                        fontSize: 18, color: Color(0xff1C1C1C)),
+                        fontSize: 18,
+                        color: Color(0xff1C1C1C),
+                      ),
                     ),
                     SizedBox(width: 16),
                     Icon(Icons.category_outlined, color: Color(0xff1C1C1C)),
@@ -137,15 +177,21 @@ class MenuWidget extends StatelessWidget {
               SizedBox(height: 12),
 
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  _closeMenu(context);
+                  showDialog(
+                    context: context,
+                    builder: (_) => const LogoutDialog(),
+                  );
+                },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      'تسجيل الخروح',
+                      'تسجيل الخروج',
                       textAlign: TextAlign.right,
                       style: TextStyle(
-                                                fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w500,
 
                         fontSize: 18,
                         color: Color.fromARGB(255, 123, 1, 1),

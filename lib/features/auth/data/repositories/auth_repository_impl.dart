@@ -54,9 +54,11 @@ class AuthRepositoryImpl implements AuthRepository {
     required String email,
     required String password,
     required String name,
+    String? fullName,
     String? phone,
     String? address,
     String? city,
+    bool isMerchant = false,
   }) async {
     if (!await _networkInfo.isConnected) {
       return Left(NetworkFailure(message: 'No internet connection'));
@@ -67,9 +69,11 @@ class AuthRepositoryImpl implements AuthRepository {
         email: email,
         password: password,
         name: name,
+        fullName: fullName,
         phone: phone,
         address: address,
         city: city,
+        isMerchant: isMerchant,
       );
 
       // Cache the token and user

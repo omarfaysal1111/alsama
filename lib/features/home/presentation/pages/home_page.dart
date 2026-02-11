@@ -25,6 +25,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final TextEditingController _searchController = TextEditingController();
+  String? _searchQuery;
+
+  void _loadProducts() {
+    context.read<ProductsBloc>().add(
+      GetProductsRequested(
+        search: _searchQuery,
+      ),
+    );
+  }
+
+  void _onSearchSubmitted(String value) {
+    final query = value.trim();
+    setState(() {
+      _searchQuery = query.isEmpty ? null : query;
+    });
+    _loadProducts();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -32,12 +51,18 @@ class _HomePageState extends State<HomePage> {
     // Use WidgetsBinding to ensure context is ready
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        context.read<ProductsBloc>().add(GetProductsRequested());
+        _loadProducts();
         context.read<CategoriesBloc>().add(
           home_categories.GetCategoriesRequested(),
         );
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -95,7 +120,7 @@ class _HomePageState extends State<HomePage> {
             icon: const Icon(Icons.refresh, color: Colors.black),
             onPressed: () {
               print('HomePage: Manual refresh triggered');
-              context.read<ProductsBloc>().add(GetProductsRequested());
+              _loadProducts();
             },
           ),
         ],
@@ -121,7 +146,7 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
-                      context.read<ProductsBloc>().add(GetProductsRequested());
+                      _loadProducts();
                     },
                     child: const Text('Retry'),
                   ),
@@ -154,13 +179,14 @@ class _HomePageState extends State<HomePage> {
           if (state is ProductsLoaded) {
             return RefreshIndicator(
               onRefresh: () async {
-                context.read<ProductsBloc>().add(RefreshProductsRequested());
+                _loadProducts();
               },
               child:  ListView(
   physics: const BouncingScrollPhysics(),
   padding: EdgeInsets.symmetric(horizontal: width * 0.04),
   children: [
                   TextField(
+                    controller: _searchController,
                     textDirection: TextDirection.rtl,
                     textAlign: TextAlign.right,
                     decoration: InputDecoration(
@@ -171,11 +197,27 @@ class _HomePageState extends State<HomePage> {
                         fontWeight: FontWeight.w400,
                         color: Color(0xffADAFB1),
                       ),
-                      suffixIcon: const Icon(
-                        Icons.search,
-                        size: 24,
-                        color: Color(0xff55585B),
+                      suffixIcon: IconButton(
+                        onPressed: () => _onSearchSubmitted(_searchController.text),
+                        icon: const Icon(
+                          Icons.search,
+                          size: 24,
+                          color: Color(0xff55585B),
+                        ),
                       ),
+                      prefixIcon:
+                          (_searchQuery != null && _searchQuery!.isNotEmpty)
+                              ? IconButton(
+                                onPressed: () {
+                                  _searchController.clear();
+                                  setState(() {
+                                    _searchQuery = null;
+                                  });
+                                  _loadProducts();
+                                },
+                                icon: const Icon(Icons.close, color: Color(0xff55585B)),
+                              )
+                              : null,
               
                       filled: true,
               
@@ -201,11 +243,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     onSubmitted: (query) {
-                      if (query.isNotEmpty) {
-                        context.read<ProductsBloc>().add(
-                          SearchProductsRequested(query: query),
-                        );
-                      }
+                      _onSearchSubmitted(query);
                     },
                   ),
                   SizedBox(height: 16),

@@ -26,6 +26,8 @@ class ProductsRepositoryImpl implements ProductsRepository {
     String? search,
     String? sortBy,
     String? sortOrder,
+    double? minPrice,
+    double? maxPrice,
   }) async {
     if (kDebugMode) {
       print('ProductsRepositoryImpl: getProducts called');
@@ -48,6 +50,8 @@ class ProductsRepositoryImpl implements ProductsRepository {
           search: search,
           sortBy: sortBy,
           sortOrder: sortOrder,
+          minPrice: minPrice,
+          maxPrice: maxPrice,
         );
 
         // Apply pagination
@@ -222,6 +226,8 @@ class ProductsRepositoryImpl implements ProductsRepository {
     String? search,
     String? sortBy,
     String? sortOrder,
+    double? minPrice,
+    double? maxPrice,
   }) {
     List<Product> filteredProducts = List.from(products);
 
@@ -256,6 +262,20 @@ class ProductsRepositoryImpl implements ProductsRepository {
                       search.toLowerCase(),
                     ),
               )
+              .toList();
+    }
+
+    // Apply price range filter
+    if (minPrice != null) {
+      filteredProducts =
+          filteredProducts
+              .where((product) => product.finalPrice >= minPrice)
+              .toList();
+    }
+    if (maxPrice != null) {
+      filteredProducts =
+          filteredProducts
+              .where((product) => product.finalPrice <= maxPrice)
               .toList();
     }
 
