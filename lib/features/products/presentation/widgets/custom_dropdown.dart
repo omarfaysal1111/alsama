@@ -29,7 +29,9 @@ class CustomDropdown extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor ?? const Color(0xffF3F5F6),
         border: Border.all(color: Color(0xffE9EAEB)),
-        borderRadius: BorderRadius.circular(8)
+        borderRadius: BorderRadius.circular(8),
+  
+        
       ),
       child: Directionality(
         textDirection: TextDirection.rtl,
@@ -38,14 +40,19 @@ class CustomDropdown extends StatelessWidget {
             isExpanded: true,
             icon: const Icon(Icons.keyboard_arrow_down),
             value: selectedValue,
-            hint: Text(
-              hintText,
-              style: const TextStyle(
-                color: Color.fromARGB(255, 44, 44, 44),
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
+            hint:  Directionality(
+              textDirection: TextDirection.ltr,
+              child: Text(
+                hintText,
+                style: const TextStyle(
+                  color: Color.fromARGB(255, 44, 44, 44),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
+            dropdownColor: Colors.white,
+            borderRadius: BorderRadius.circular(8),
             items:
                 items.map((item) {
                   return DropdownMenuItem<String>(

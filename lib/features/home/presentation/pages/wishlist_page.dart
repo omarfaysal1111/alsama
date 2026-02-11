@@ -185,7 +185,7 @@ class _WishlistItemCard extends StatelessWidget {
                           textDirection: TextDirection.rtl,
                 
                           child: Text(
-                            '${item.finalPrice.toStringAsFixed(0)} ج.م ',
+                            '${item.finalPrice.toStringAsFixed(0)} EGP ',
                             style: const TextStyle(
                               color: Color(0xff821F40),
                               fontWeight: FontWeight.bold,
@@ -196,7 +196,7 @@ class _WishlistItemCard extends StatelessWidget {
                         if (item.hasDiscount) ...[
                           const SizedBox(width: 8),
                           Text(
-                            '${item.price.toStringAsFixed(0)} ج.م',
+                            '${item.price.toStringAsFixed(0)} EGP',
                             style: const TextStyle(
                               color: Colors.grey,
                               fontSize: 12,

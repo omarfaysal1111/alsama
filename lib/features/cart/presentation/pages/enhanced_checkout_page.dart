@@ -199,12 +199,12 @@ class _EnhancedCheckoutPageState extends State<EnhancedCheckoutPage> {
                       ),
                     ),
                     SizedBox(height: height * 0.02),
-                    _SectionCard(
-                      title: 'طريقة الدفع',
-                      child: PaymentMethodSelector(
-                        onPaymentMethodChanged: _onPaymentMethodChanged,
-                      ),
-                    ),
+                    // _SectionCard(
+                    //   title: 'طريقة الدفع',
+                    //   child: PaymentMethodSelector(
+                    //     onPaymentMethodChanged: _onPaymentMethodChanged,
+                    //   ),
+                    // ),
                     SizedBox(height: height * 0.02),
                     _SectionCard(
                       title: 'ملخص الطلب',
@@ -217,24 +217,20 @@ class _EnhancedCheckoutPageState extends State<EnhancedCheckoutPage> {
                             padding: const EdgeInsets.symmetric(vertical: 8),
                             child: Row(
                               children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(4),
-                                  child: CachedNetworkImage(
-                                    imageUrl: item.product.img,
-                                    width: 60,
-                                    height: 60,
-                                    fit: BoxFit.cover,
-                                    placeholder:
-                                        (context, url) => Container(
-                                          color: const Color(0xffF3F5F6),
-                                        ),
-                                    errorWidget:
-                                        (context, url, error) => const Icon(
-                                          Icons.image_not_supported,
-                                        ),
+                                
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 50.0),
+                                  child: Text(
+                                    ' EGP ${item.totalPrice.toStringAsFixed(2)} ',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xff821F40),
+                                    ),
                                   ),
                                 ),
-                                const SizedBox(width: 12),
+                                                                const SizedBox(width: 12),
+
+
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -258,11 +254,23 @@ class _EnhancedCheckoutPageState extends State<EnhancedCheckoutPage> {
                                   ),
                                 ),
                                 const SizedBox(width: 12),
-                                Text(
-                                  '${item.totalPrice.toStringAsFixed(2)} ج.م',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xff821F40),
+                                
+
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: CachedNetworkImage(
+                                    imageUrl: item.product.img,
+                                    width: 80,
+                                    height: 80,
+                                    fit: BoxFit.cover,
+                                    placeholder:
+                                        (context, url) => Container(
+                                          color: const Color(0xffF3F5F6),
+                                        ),
+                                    errorWidget:
+                                        (context, url, error) => const Icon(
+                                          Icons.image_not_supported,
+                                        ),
                                   ),
                                 ),
                               ],
@@ -279,22 +287,22 @@ class _EnhancedCheckoutPageState extends State<EnhancedCheckoutPage> {
                         children: [
                           _SummaryRow(
                             label: 'إجمالي المنتجات',
-                            value: '${subtotal.toStringAsFixed(2)} ج.م',
+                            value: 'EGP ${subtotal.toStringAsFixed(2)} ',
                           ),
                           const SizedBox(height: 6),
                           _SummaryRow(
                             label: 'رسوم الشحن',
-                            value: '${_shippingCost.toStringAsFixed(2)} ج.م',
+                            value: 'EGP ${_shippingCost.toStringAsFixed(2)} ',
                           ),
                           const SizedBox(height: 6),
                           _SummaryRow(
                             label: 'الضريبة (14%)',
-                            value: '${tax.toStringAsFixed(2)} ج.م',
+                            value: ' EGP ${tax.toStringAsFixed(2)} ',
                           ),
                           const Divider(height: 24),
                           _SummaryRow(
                             label: 'المجموع النهائي',
-                            value: '${total.toStringAsFixed(2)} ج.م',
+                            value: 'EGP ${total.toStringAsFixed(2)} ',
                             isBold: true,
                           ),
                         ],
@@ -316,17 +324,31 @@ class _EnhancedCheckoutPageState extends State<EnhancedCheckoutPage> {
             builder: (context, ordersState) {
               final isLoading = ordersState is OrdersLoading;
 
-              return Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: width * 0.04,
-                  vertical: height * 0.02,
-                ),
-                child: DefaultButton(
-                  text: isLoading ? 'جاري المعالجة...' : 'إتمام الطلب',
-                  onTap:
-                      isLoading || cartState is! CartLoaded
-                          ? () {}
-                          : () => _completeOrder(cartState as CartLoaded),
+              return Container(
+                 decoration: BoxDecoration(
+
+              borderRadius: BorderRadius.circular(16),
+        color: Colors.white, 
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1), 
+            blurRadius: 10,
+            offset: Offset(0, -3),
+          ),
+        ],
+      ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: width * 0.04,
+                    vertical: height * 0.02,
+                  ),
+                  child: DefaultButton(
+                    text: isLoading ? 'جاري المعالجة...' : 'إتمام الطلب',
+                    onTap:
+                        isLoading || cartState is! CartLoaded
+                            ? () {}
+                            : () => _completeOrder(cartState as CartLoaded),
+                  ),
                 ),
               );
             },

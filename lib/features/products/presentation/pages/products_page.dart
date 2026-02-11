@@ -365,7 +365,7 @@ class _ProductGridCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          '${product.finalPrice.toStringAsFixed(0)} ج.م',
+                          '${product.finalPrice.toStringAsFixed(0)} EGP',
                           style: const TextStyle(
                             color: Color(0xff821F40),
                             fontWeight: FontWeight.bold,
@@ -375,7 +375,7 @@ class _ProductGridCard extends StatelessWidget {
                         if (product.hasDiscount) ...[
                           const SizedBox(width: 6),
                           Text(
-                            '${product.price.toStringAsFixed(0)} ج.م',
+                            '${product.price.toStringAsFixed(0)} EGP',
                             style: const TextStyle(
                               color: Colors.grey,
                               decoration: TextDecoration.lineThrough,

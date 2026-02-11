@@ -63,8 +63,8 @@ class _FilterWidgetState extends State<FilterWidget> {
                   divisions: 30,
 
                   labels: RangeLabels(
-                    '${priceRange.start.round()} ج.م',
-                    '${priceRange.end.round()} ج.م',
+                    '${priceRange.start.round()} EGP',
+                    '${priceRange.end.round()} EGP',
                   ),
                   activeColor: const Color(0xff821F40),
                   inactiveColor: Colors.grey[300],
@@ -81,13 +81,13 @@ class _FilterWidgetState extends State<FilterWidget> {
                     children: [
                       Flexible(
                         child: Text(
-                          '${priceRange.start.round()} ج.م',
+                          '${priceRange.start.round()} EGP',
                           softWrap: true,
                         ),
                       ),
                       Flexible(
                         child: Text(
-                          '${priceRange.end.round()} ج.م',
+                          '${priceRange.end.round()} EGP',
                           textAlign: TextAlign.end,
                           softWrap: true,
                             

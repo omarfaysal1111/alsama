@@ -20,7 +20,7 @@ class _OptionItem {
 
 class ProductDetailPage extends StatefulWidget {
   final Product product;
-  
+
   const ProductDetailPage({super.key, required this.product});
 
   @override
@@ -36,7 +36,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   List<_OptionItem> _sizes = [];
   bool _loadingColors = false;
   bool _loadingSizes = false;
-  
+
   bool get _hasSelectedRequiredOptions =>
       selectedColor != null && selectedSize != null;
 
@@ -44,6 +44,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   void initState() {
     super.initState();
     _fetchColors();
+    selectedImage = widget.product.img;
   }
 
   Future<void> _fetchColors() async {
@@ -183,7 +184,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       colorId: _resolveColorId(),
       sizeId: _resolveSizeId(),
     );
-    
+
     context.read<CartBloc>().add(
       AddProductToCartRequested(
         product: productWithOptions,
@@ -223,6 +224,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     }
   }
 
+  late String selectedImage;
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -247,20 +250,45 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           children: [
             Padding(
               padding: EdgeInsets.only(bottom: height * (16 / 844)),
-              child: Container(
-                width: double.infinity,
-                height: height * (400 / 844),
-                decoration:  BoxDecoration(color: Color(0xffF3F5F6),borderRadius: BorderRadius.circular(8)),
-                child: CachedNetworkImage(
-                  imageUrl: widget.product.img,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                  errorWidget: (context, url, error) => const Icon(
-                    Icons.image_not_supported,
-                    size: 80,
-                    color: Colors.grey,
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                switchInCurve: Curves.easeInOut,
+                switchOutCurve: Curves.easeIn,
+                // transitionBuilder: (child, animation) {
+                //   return FadeTransition(
+                //     opacity: animation,
+                //     child: ScaleTransition(
+                //       scale: Tween<double>(begin: 0.95, end: 1.0).animate(animation),
+                //       child: child,
+                //     ),
+                //   );
+                // },
+                child: ClipRRect(
+                  key: ValueKey(selectedImage),
+
+                  borderRadius: BorderRadius.circular(8),
+                  child: Container(
+                    width: double.infinity,
+                    height: height * (500 / 844),
+                    decoration: BoxDecoration(
+                      color: Color(0xffF3F5F6),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: CachedNetworkImage(
+                      imageUrl: selectedImage,
+
+                      // imageUrl: widget.product.img,
+                      fit: BoxFit.cover,
+                      placeholder:
+                          (context, url) =>
+                              const Center(child: CircularProgressIndicator()),
+                      errorWidget:
+                          (context, url, error) => const Icon(
+                            Icons.image_not_supported,
+                            size: 80,
+                            color: Colors.grey,
+                          ),
+                    ),
                   ),
                 ),
               ),
@@ -278,17 +306,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${widget.product.finalPrice.toStringAsFixed(0)} ج.م',
+                            ' EGP ${widget.product.finalPrice.toStringAsFixed(0)} ',
                             textAlign: TextAlign.right,
                             style: const TextStyle(
                               color: Color(0xff821F40),
-                              fontSize: 22,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           if (widget.product.hasDiscount)
                             Text(
-                              '${widget.product.price.toStringAsFixed(0)} ج.م',
+                              ' EGP ${widget.product.price.toStringAsFixed(0)} ',
                               style: const TextStyle(
                                 color: Colors.grey,
                                 fontSize: 14,
@@ -303,7 +331,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           widget.product.title,
                           textAlign: TextAlign.right,
                           style: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             color: Colors.black,
                             fontWeight: FontWeight.w600,
                           ),
@@ -312,7 +340,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ],
                   ),
                   SizedBox(height: height * (16 / 844)),
-                  const Divider(color: Color(0xffF8F8F8), thickness: 1),
+                  // const Divider(color: Color(0xffF8F8F8), thickness: 1),
 
                   SizedBox(height: height * (12 / 844)),
 
@@ -322,9 +350,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       height: height * (80 / 844),
                       child: Directionality(
                         textDirection: TextDirection.rtl,
-                        
+
                         child: ListView.builder(
-                          
                           scrollDirection: Axis.horizontal,
                           shrinkWrap: true,
                           itemCount: widget.product.imageURLs.length,
@@ -334,17 +361,55 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 left: width * (16 / 390),
                                 bottom: height * (16 / 844),
                               ),
-                              child: Container(
-                                width: width * (60 / 390),
-                                decoration:  BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: Color(0xffF3F5F6),
-                                ),
-                                child: CachedNetworkImage(
-                                  imageUrl: widget.product.imageURLs[index].img,
-                                  fit: BoxFit.cover,
-                                  errorWidget: (context, url, error) =>
-                                      const Icon(Icons.image),
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectedImage =
+                                        widget.product.imageURLs[index].img;
+                                  });
+                                },
+
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 200),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color:
+                                          selectedImage ==
+                                                  widget
+                                                      .product
+                                                      .imageURLs[index]
+                                                      .img
+                                              ? const Color.fromARGB(
+                                                255,
+                                                12,
+                                                12,
+                                                12,
+                                              ).withOpacity(0.7)
+                                              : Colors.transparent,
+                                      width: 2,
+                                    ),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadiusGeometry.circular(
+                                      8,
+                                    ),
+                                    child: Container(
+                                      width: width * (60 / 390),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        color: Color(0xffF3F5F6),
+                                      ),
+                                      child: CachedNetworkImage(
+                                        imageUrl:
+                                            widget.product.imageURLs[index].img,
+                                        fit: BoxFit.cover,
+                                        errorWidget:
+                                            (context, url, error) =>
+                                                const Icon(Icons.image),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             );
@@ -352,7 +417,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ),
                       ),
                     ),
-                  const Divider(color: Color(0xffF8F8F8), thickness: 1),
+                //  const Divider(color: Color(0xffF8F8F8), thickness: 1),
 
                   SizedBox(height: height * (16 / 844)),
                 ],
@@ -389,10 +454,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ),
             ),
 
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: width * (16 / 390)),
-              child: const Divider(color: Color(0xffF8F8F8), thickness: 1),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: width * (16 / 390)),
+            //   child: const Divider(color: Color(0xffF8F8F8), thickness: 1),
+            // ),
 
             // Stock status
             if (!widget.product.isInStock)
@@ -431,7 +496,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 'اللون',
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 16,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -452,7 +517,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 hintText:
                     _loadingColors
                         ? 'جاري تحميل الألوان...'
-                        : (_colors.isEmpty ? 'لا توجد ألوان متاحة' : 'اختر اللون'),
+                        : (_colors.isEmpty
+                            ? 'لا توجد ألوان متاحة'
+                            : 'اختر اللون'),
                 onChanged: (value) {
                   final color = _colors.where((e) => e.name == value);
                   final colorId = color.isNotEmpty ? color.first.id : '';
@@ -468,10 +535,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ),
             ),
 
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: width * (16 / 390)),
-              child: const Divider(color: Color(0xffF8F8F8), thickness: 1),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: width * (16 / 390)),
+            //   child: const Divider(color: Color(0xffF8F8F8), thickness: 1),
+            // ),
 
             SizedBox(height: height * (16 / 844)),
 
@@ -481,7 +548,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 'المقاس',
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 16,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -511,10 +578,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ),
             ),
 
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: width * (16 / 390)),
-              child: const Divider(color: Color(0xffF8F8F8), thickness: 1),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: width * (16 / 390)),
+            //   child: const Divider(color: Color(0xffF8F8F8), thickness: 1),
+            // ),
 
             SizedBox(height: height * (16 / 844)),
 
@@ -524,7 +591,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 'الكمية',
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 16,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -540,6 +607,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     height: height * 35 / 844,
                     decoration: BoxDecoration(
                       color: const Color(0xffF3F5F6),
+                      borderRadius: BorderRadius.circular(8),
                       border: Border.all(
                         width: 1,
                         color: const Color.fromARGB(255, 214, 214, 214),
@@ -608,10 +676,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ),
             SizedBox(height: height * (16 / 844)),
 
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: width * (16 / 390)),
-              child: const Divider(color: Color(0xffF8F8F8), thickness: 1),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: width * (16 / 390)),
+            //   child: const Divider(color: Color(0xffF8F8F8), thickness: 1),
+            // ),
 
             SizedBox(height: height * (16 / 844)),
           ],
@@ -620,22 +688,37 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       bottomNavigationBar: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
           final isLoading = state is CartLoading;
-          
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: width * (16 / 390)),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                DefaultButton(
-                  text: isLoading ? 'جاري الإضافة...' : 'أضف إلى السلة',
-                  onTap: widget.product.isInStock &&
-                          !isLoading &&
-                          _hasSelectedRequiredOptions
-                      ? _addToCart
-                      : () {},
-                ),
-                SizedBox(height: height * (20 / 844)),
-              ],
+
+          return Container(
+            decoration: BoxDecoration(
+
+              borderRadius: BorderRadius.circular(16),
+        color: Colors.white, 
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1), 
+            blurRadius: 10,
+            offset: Offset(0, -3),
+          ),
+        ],
+      ),
+            child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: width * (12 / 390), vertical: height * (12 / 844)),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  DefaultButton(
+                    text: isLoading ? 'جاري الإضافة...' : 'أضف إلى السلة',
+                    onTap:
+                        widget.product.isInStock &&
+                                !isLoading &&
+                                _hasSelectedRequiredOptions
+                            ? _addToCart
+                            : () {},
+                  ),
+                  SizedBox(height: height * (20 / 844)),
+                ],
+              ),
             ),
           );
         },

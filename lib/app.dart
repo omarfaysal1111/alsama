@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           useMaterial3: true,
         ),
-        initialRoute: AppRoutes.login,
+        initialRoute: AppRoutes.home,
         onGenerateRoute: RouteGenerator.generateRoute,
         debugShowCheckedModeBanner: false,
       ),

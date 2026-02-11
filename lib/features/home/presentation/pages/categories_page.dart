@@ -183,7 +183,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                                       textAlign: TextAlign.right,
                                       textDirection: TextDirection.rtl,
                                       style: const TextStyle(
-                                        fontSize: 22,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w600,
                                         color: Colors.black,
                                       ),

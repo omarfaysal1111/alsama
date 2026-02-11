@@ -132,9 +132,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               ClipRRect(
-                                borderRadius: BorderRadius.circular(4),
+                                borderRadius: BorderRadius.circular(8),
                                 child: CachedNetworkImage(
                                   imageUrl: item.product.img,
                                   width: 60,
@@ -174,7 +175,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               ),
                               const SizedBox(width: 12),
                               Text(
-                                '${item.totalPrice.toStringAsFixed(2)} ج.م',
+                                '${item.totalPrice.toStringAsFixed(2)} EGP',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Color(0xff821F40),
@@ -195,17 +196,17 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         _SummaryRow(
                           label: 'إجمالي المنتجات',
                           value:
-                              '${state.cartItems.fold<double>(0, (sum, item) => sum + item.totalPrice).toStringAsFixed(2)} ج.م',
+                              '${state.cartItems.fold<double>(0, (sum, item) => sum + item.totalPrice).toStringAsFixed(2)} EGP',
                         ),
                         const SizedBox(height: 6),
                         const _SummaryRow(
                           label: 'رسوم الشحن',
-                          value: '40.00 ج.م',
+                          value: '40.00 EGP',
                         ),
                         const Divider(height: 24),
                         _SummaryRow(
                           label: 'المجموع النهائي',
-                          value: '${(state.total + 40).toStringAsFixed(2)} ج.م',
+                          value: '${(state.total + 40).toStringAsFixed(2)} EGP',
                           isBold: true,
                         ),
                       ],
@@ -248,7 +249,7 @@ class _SectionCard extends StatelessWidget {
         border: Border.all(color: const Color(0xffE0E2E3)),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,

@@ -113,7 +113,7 @@ class _CartPageState extends State<CartPage> {
               child: Column(
                 children: [
                   Expanded(
-                    flex: 3,
+
                     child: ListView.builder(
                       itemCount: state.cartItems.length,
                       itemBuilder: (context, index) {
@@ -178,12 +178,13 @@ class _CartPageState extends State<CartPage> {
                                 ),
                               ),
                               Text(
-                                ' ${state.total.toStringAsFixed(2)} ج.م',
+                                ' ${state.total.toStringAsFixed(2)} EGP',
                                 textAlign: TextAlign.right,
                                 textDirection: TextDirection.rtl,
+                                
                                 style: TextStyle(
                                   color: Color(0xff821F40),
-                                  fontSize: 22,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),

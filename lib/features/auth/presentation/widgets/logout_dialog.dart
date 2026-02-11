@@ -31,7 +31,7 @@ class LogoutDialog extends StatelessWidget {
       },
       child: Dialog(
         backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(

@@ -170,37 +170,44 @@ class _AddressFormWidgetState extends State<AddressFormWidget> {
     TextInputType? keyboardType,
     bool enabled = true,
   }) {
-    return TextFormField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: const TextStyle(fontSize: 14),
-        prefixIcon: Icon(icon, size: 20),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Color(0xffE0E2E3)),
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: TextFormField(
+        controller: controller,
+            textDirection: TextDirection.rtl,
+      
+        decoration: InputDecoration(
+      
+          labelText: label,
+          labelStyle: const TextStyle(fontSize: 14),
+          prefixIcon: Icon(icon, size: 20),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: Color(0xffE0E2E3)),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: Color(0xffE0E2E3)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: Color(0xff821F40), width: 2),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: Colors.red),
+          ),
+          filled: true,
+          fillColor: enabled ? Colors.white : const Color(0xffF3F5F6),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Color(0xffE0E2E3)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Color(0xff821F40), width: 2),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.red),
-        ),
-        filled: true,
-        fillColor: enabled ? Colors.white : const Color(0xffF3F5F6),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        textAlign: TextAlign.right,
+        validator: validator,
+        keyboardType: keyboardType,
+        
+        enabled: enabled,
+        onChanged: (_) => _notifyAddressChanged(),
       ),
-      textAlign: TextAlign.right,
-      validator: validator,
-      keyboardType: keyboardType,
-      enabled: enabled,
-      onChanged: (_) => _notifyAddressChanged(),
     );
   }
 }
